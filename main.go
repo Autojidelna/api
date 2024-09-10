@@ -1,23 +1,24 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
+	"database/sql"
+
+	_ "github.com/lib/pq"
+
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
-	_ "github.com/lib/pq"
 )
 
 const (
 	dbHost     = "localhost"
 	dbPort     = 5433
 	dbUser     = "tom"
-	dbPassword = ""
+	dbPassword = "tom"
 	dbName     = "tom"
 )
 
@@ -81,7 +82,7 @@ func setupRouter() *gin.Engine {
 	return app
 }
 
-func initSentry() error {
+func main() {
 	if err := sentry.Init(sentry.ClientOptions{
 		Dsn:           "https://0a46799bef1e6ceb83bc77eba5c5aaea@o4507799131258880.ingest.de.sentry.io/4507928244256848",
 		EnableTracing: true,
@@ -91,26 +92,21 @@ func initSentry() error {
 		TracesSampleRate: 1.0,
 	}); err != nil {
 		fmt.Printf("Sentry initialization failed: %v\n", err)
-		return err
 	}
-	return nil
-}
-
-func initDatabase() (*sql.DB, error) {
+	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)
 	dbHere, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		fmt.Println("Error: Could not establish a connection with the database")
-		return nil, err
-	}
 	db = dbHere
-	return db, nil
-}
-
-func main() {
-	defer onExit()
+	if err != nil {
+		panic(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("Gin is running in debug mode")
 		// Do something specific for debug mode
@@ -120,25 +116,7 @@ func main() {
 	}
 	println("Starting server")
 
-	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
-	err := initSentry()
-	if err != nil {
-		panic(err)
-	}
-	_, err = initDatabase()
-	if err != nil {
-		panic(err)
-	}
-
 	app := setupRouter()
 	app.Run(":8080")
 
-}
-
-func onExit() {
-	println("Closing database connection")
-	sentry.Flush(2 * time.Second)
-	if db != nil {
-		db.Close()
-	}
 }
