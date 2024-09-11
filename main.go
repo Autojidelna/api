@@ -1,17 +1,41 @@
 package main
 
+// @title           Swagger Example API
+// @version         1.0
+// @description     This is a sample server celler server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
+
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
-
-	"database/sql"
-
-	_ "github.com/lib/pq"
+	"context"
+	"coree/ent"
+	"log"
 
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
+
+	"coree/ent/user"
+
+	"fmt"
+	"net/http"
+
+	_ "github.com/lib/pq"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -22,9 +46,47 @@ const (
 	dbName     = "tom"
 )
 
-var db *sql.DB
+type UserInput struct {
+	Name string `json:"name" binding:"required"`
+}
+
+var dbClient *ent.Client
+
+func QueryUser(ctx context.Context, client *ent.Client, name string) (*ent.User, error) {
+	u, err := client.User.
+		Query().
+		Where(user.Name(name)).
+		// `Only` fails if no user found,
+		// or more than 1 user returned.
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed querying user: %w", err)
+	}
+	log.Println("user returned: ", u)
+	return u, nil
+}
+
+func CreateUser(ctx context.Context, client *ent.Client, name string) (*ent.User, error) {
+	u, err := client.User.
+		Create().
+		SetAge(30).
+		SetName(name).
+		Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed creating user: %w", err)
+	}
+	log.Println("user was created: ", u)
+	return u, nil
+}
 
 func setupRouter() *gin.Engine {
+	if gin.Mode() == gin.DebugMode {
+		fmt.Println("Gin is running in debug mode")
+		// Do something specific for debug mode
+	} else {
+		fmt.Println("Gin is running in release or test mode")
+		// Do something else for release or test mode
+	}
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	app := gin.Default()
@@ -41,30 +103,49 @@ func setupRouter() *gin.Engine {
 	// Get user value
 	app.GET("/user/:name", func(context *gin.Context) {
 		user := context.Params.ByName("name")
-		context.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
+		resultUser, err := QueryUser(context, dbClient, user)
+		if err != nil {
+			context.JSON(http.StatusOK, gin.H{"user": resultUser, "status": "error"})
+			return
+		}
+		context.JSON(http.StatusOK, gin.H{"user": resultUser, "status": "ok"})
 	})
 
-	// Authorized group (uses gin.BasicAuth() middleware)
-	// Same than:
-	// authorized := r.Group("/")
-	// authorized.Use(gin.BasicAuth(gin.Credentials{
-	//	  "foo":  "bar",
-	//	  "manu": "123",
-	//}))
+	app.POST("/users", func(c *gin.Context) {
+		var input UserInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Save the user to the database
+		user, err := dbClient.User.
+			Create().
+			SetName(input.Name).
+			Save(context.Background())
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Respond with the created user
+		c.JSON(http.StatusOK, gin.H{
+			"id":   user.ID,
+			"name": user.Name,
+		})
+	})
+	app.GET("/foo", func(ctx *gin.Context) {
+		// sentrygin handler will catch it just fine. Also, because we attached "someRandomTag"
+		// in the middleware before, it will be sent through as well
+		panic("y tho")
+	})
+
 	authorized := app.Group("/", gin.BasicAuth(gin.Accounts{
 		"foo":  "bar", // user:foo password:bar
 		"manu": "123", // user:manu password:123
 	}))
 
-	/* example curl for /admin with basicauth header
-	   Zm9vOmJhcg== is base64("foo:bar")
-
-		curl -X POST \
-	  	http://localhost:8080/admin \
-	  	-H 'authorization: Basic Zm9vOmJhcg==' \
-	  	-H 'content-type: application/json' \
-	  	-d '{"value":"bar"}'
-	*/
 	authorized.POST("admin", func(context *gin.Context) {
 		user := context.MustGet(gin.AuthUserKey).(string)
 		fmt.Print("user: "+user+"\n", gin.Logger())
@@ -81,8 +162,25 @@ func setupRouter() *gin.Engine {
 
 	return app
 }
+func initDatabase() {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		dbHost, dbPort, dbUser, dbPassword, dbName)
+	db, err := ent.Open("postgres", psqlInfo)
+	if err != nil {
+		log.Fatalf("failed opening connection to postgres: %v", err)
+	}
 
-func main() {
+	// Run the auto migration tool.
+	if err := db.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+
+	dbClient = db
+}
+
+func initSentry() {
+	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
 	if err := sentry.Init(sentry.ClientOptions{
 		Dsn:           "https://0a46799bef1e6ceb83bc77eba5c5aaea@o4507799131258880.ingest.de.sentry.io/4507928244256848",
 		EnableTracing: true,
@@ -93,27 +191,13 @@ func main() {
 	}); err != nil {
 		fmt.Printf("Sentry initialization failed: %v\n", err)
 	}
-	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
-	dbHere, err := sql.Open("postgres", psqlInfo)
-	db = dbHere
-	if err != nil {
-		panic(err)
-	}
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	if gin.Mode() == gin.DebugMode {
-		fmt.Println("Gin is running in debug mode")
-		// Do something specific for debug mode
-	} else {
-		fmt.Println("Gin is running in release or test mode")
-		// Do something else for release or test mode
-	}
+}
+
+func main() {
+	initSentry()
+	initDatabase()
+	defer dbClient.Close()
+
 	println("Starting server")
 
 	app := setupRouter()
