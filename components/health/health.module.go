@@ -1,9 +1,9 @@
-package sentrytest
+package health
 
 import "github.com/gin-gonic/gin"
 
 // Api for testing Sentry is setup correctly
 func Register(router *gin.Engine) {
-	app := router.Group("sentry")
-	app.GET("/crash", testCrash)
+	router.GET("/healthz", health)
+	router.GET("/health", health)
 }

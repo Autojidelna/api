@@ -1,28 +1,23 @@
 package main
 
-//	@title			Swagger Example API
+//	@title			APPE COREE example server
 //	@version		1.0
-//	@description	This is a sample server celler server.
-//	@termsOfService	http://swagger.io/terms/
+//	@description	This is an example for all api server projects in App Elevate
 
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	support@swagger.io
-
-//	@license.name	Apache 2.0
-//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// 	@tag.name 	DB Example API
+// 	@tag.description	API for testing that the database is setup correctly
+// 	@tag.name	Sentry Test API
+// 	@tag.description	Api for testing Sentry is setup correctly
+// 	@tag.name	Health Check
+// 	@tag.description	Health Check for this API
 
 //	@host		localhost:8080
 //	@BasePath	/
 
-//	@securityDefinitions.basic	BasicAuth
-
-//	@externalDocs.description	OpenAPI
-//	@externalDocs.url			https://swagger.io/resources/open-api/
-
 import (
 	"context"
 	dbexample "coree/components/db_example"
+	"coree/components/health"
 	sentrytest "coree/components/sentry_test"
 	"coree/ent"
 	"log"
@@ -53,25 +48,29 @@ const (
 var dbClient *ent.Client
 
 func setupRouter() *gin.Engine {
-	if gin.Mode() == gin.DebugMode {
-		fmt.Println("Gin is running in debug mode")
-	} else {
-		fmt.Println("Gin is running in release or test mode")
-	}
 	app := gin.Default()
 	app.Use(sentrygin.New(sentrygin.Options{
 		Repanic: true,
 	}))
 
+	// register modules
 	dbexample.Register(app, dbClient)
 	sentrytest.Register(app)
-	app.GET("/", func(context *gin.Context) {
-		context.Redirect(http.StatusMovedPermanently, "/docs/index.html")
-	})
-	app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	health.Register(app)
+
+	if gin.Mode() == gin.DebugMode {
+		fmt.Println("Gin is running in debug mode creating swagger docs")
+		app.GET("/", func(context *gin.Context) {
+			context.Redirect(http.StatusMovedPermanently, "/docs/index.html")
+		})
+		app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	} else {
+		fmt.Println("Gin is running in release mode")
+	}
 
 	return app
 }
+
 func initDatabase() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",

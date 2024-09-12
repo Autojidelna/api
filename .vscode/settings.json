@@ -10,6 +10,11 @@
         "match": "\\.module.go$",
         "isAsync": true,
         "cmd": "~/go/bin/swag init"
+      },
+      {
+        "match": "\\main.go$",
+        "isAsync": true,
+        "cmd": "~/go/bin/swag init"
       }
     ]
   }

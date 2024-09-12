@@ -23,37 +23,14 @@ definitions:
     - id
     - name
     type: object
-externalDocs:
-  description: OpenAPI
-  url: https://swagger.io/resources/open-api/
 host: localhost:8080
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server celler server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  contact: {}
+  description: This is an example for all api server projects in App Elevate
+  title: APPE COREE example server
   version: "1.0"
 paths:
-  /crash:
-    get:
-      consumes:
-      - application/json
-      description: Crash the server
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: Crashes the server and sends a report to Sentry
-  /db-example/user:
+  /db/user:
     post:
       consumes:
       - application/json
@@ -72,8 +49,20 @@ paths:
           description: ok
           schema:
             $ref: '#/definitions/dbexample.UserGet'
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
       summary: Create a user
-  /db-example/user/{name}:
+      tags:
+      - DB Example API
+  /db/user/{name}:
     get:
       consumes:
       - application/json
@@ -91,8 +80,52 @@ paths:
           description: ok
           schema:
             $ref: '#/definitions/dbexample.UserGet'
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
       summary: Get a User by name
-securityDefinitions:
-  BasicAuth:
-    type: basic
+      tags:
+      - DB Example API
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Crash the server
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Health check for the server
+      tags:
+      - Health Check
+  /sentry/crash:
+    get:
+      consumes:
+      - application/json
+      description: Crash the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Crashes the server and sends a report to Sentry
+      tags:
+      - Sentry Test API
 swagger: "2.0"
+tags:
+- description: API for testing that the database is setup correctly
+  name: DB Example API
+- description: Api for testing Sentry is setup correctly
+  name: Sentry Test API
+- description: Health Check for this API
+  name: Health Check
