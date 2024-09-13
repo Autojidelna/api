@@ -27,7 +27,7 @@ func queryUser(ctx context.Context, client *ent.Client, name string) (*ent.User,
 func createUser(ctx context.Context, client *ent.Client, name string, age int) (*ent.User, error) {
 	u, err := client.User.
 		Create().
-		SetAge(30).
+		SetAge(age).
 		SetName(name).
 		Save(ctx)
 	if err != nil {

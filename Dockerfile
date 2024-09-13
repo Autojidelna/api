@@ -13,7 +13,7 @@ RUN go mod download
 # Builds your app with optional configuration
 RUN go build -o /godocker
 
-FROM alpine:latest
+FROM scratch
 COPY --from=builder /godocker /
 # Tells Docker which network port your container listens on
 EXPOSE 8080
