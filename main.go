@@ -22,6 +22,7 @@ import (
 	"coree/ent"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
@@ -35,14 +36,6 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-)
-
-const (
-	dbHost     = "localhost"
-	dbPort     = 5433
-	dbUser     = "tom"
-	dbPassword = "tom"
-	dbName     = "tom"
 )
 
 var dbClient *ent.Client
@@ -72,6 +65,23 @@ func setupRouter() *gin.Engine {
 }
 
 func initDatabase() {
+	dbHost, ok := os.LookupEnv("POSTGRES_HOST")
+	if !ok {
+		dbHost = "localhost"
+	}
+	dbUser, ok := os.LookupEnv("POSTGRES_USER")
+	if !ok {
+		dbUser = "postgres"
+	}
+	dbPassword, ok := os.LookupEnv("POSTGRES_PASSWORD")
+	if !ok {
+		dbPassword = "password"
+	}
+	dbName, ok := os.LookupEnv("POSTGRES_DB")
+	if !ok {
+		dbName = "postgres"
+	}
+	dbPort := 5432
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)
