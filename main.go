@@ -125,7 +125,7 @@ func main() {
 	defer dbClient.Close()
 
 	app := setupRouter()
-	println("App is running on http://localhost:8080")
-	app.Run(":8080")
+	println("App is running on http://localhost")
+	app.Run(":80")
 
 }

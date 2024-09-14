@@ -3,23 +3,30 @@ services:
     #build:
     #  context: .
     #  dockerfile: Dockerfile
-    image: coree:latest
+    image: localhost:5000/coree:latest
     ports:
-      - "8080:8080"
+      - "80:80"
     depends_on:
       - db
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_USER=postgress
-      - POSTGRES_PASSWORD=postgress
-      - POSTGRES_DB=app_dbs
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=app_db
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    pull_policy: always 
 
   db:
     image: postgres:13-alpine
     environment:
-      POSTGRES_USER: postgress
-      POSTGRES_PASSWORD: postgress
-      POSTGRES_DB: app_dbs
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_db
     ports:
       - "5432:5432"
     volumes:
