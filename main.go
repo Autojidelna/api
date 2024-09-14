@@ -23,6 +23,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
@@ -54,7 +55,7 @@ func setupRouter() *gin.Engine {
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("Gin is running in debug mode creating swagger docs")
 		app.GET("/", func(context *gin.Context) {
-			context.Redirect(http.StatusMovedPermanently, "/docs/index.html")
+			context.Redirect(http.StatusTemporaryRedirect, "/docs/index.html")
 		})
 		app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	} else {
@@ -75,7 +76,7 @@ func initDatabase() {
 	}
 	dbPassword, ok := os.LookupEnv("POSTGRES_PASSWORD")
 	if !ok {
-		dbPassword = "password"
+		dbPassword = "postgres"
 	}
 	dbName, ok := os.LookupEnv("POSTGRES_DB")
 	if !ok {
@@ -85,17 +86,23 @@ func initDatabase() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)
-	db, err := ent.Open("postgres", psqlInfo)
-	if err != nil {
-		log.Fatalf("failed opening connection to postgres: %v", err)
+	for {
+		db, err := ent.Open("postgres", psqlInfo)
+		if err != nil {
+			log.Printf("failed opening connection to postgres: %v", err)
+		}
+
+		// Run the auto migration tool.
+		if err := db.Schema.Create(context.Background()); err != nil {
+			log.Printf("failed creating schema resources: %v", err)
+		}
+		dbClient = db
+		time.Sleep(time.Second)
+		if dbClient != nil && err == nil {
+			break
+		}
 	}
 
-	// Run the auto migration tool.
-	if err := db.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-
-	dbClient = db
 }
 
 func initSentry() {

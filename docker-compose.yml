@@ -1,24 +1,25 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile
+    image: coree:latest
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=app_db
+      - POSTGRES_USER=postgress
+      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_DB=app_dbs
 
   db:
     image: postgres:13-alpine
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: app_db
+      POSTGRES_USER: postgress
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: app_dbs
     ports:
       - "5432:5432"
     volumes:
