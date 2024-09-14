@@ -49,3 +49,26 @@ air
 - [golang](https://marketplace.visualstudio.com/items?itemName=golang.go)
 - [Run on Save](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave)
   - We use this to automatically generate ent models and swagger documentation on save
+
+## Deployment
+
+1. Download [docker](https://docs.docker.com/get-docker/)
+2. Enable docker buildx - just check the box `Use containerd for pulling and storing images` in docker desktop -> settings -> general
+3. Build the image
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t registry.appelevate.cz/coree:latest .
+```
+
+4. Push the image to the registry
+
+```bash
+docker push registry.appelevate.cz/coree:latest
+```
+
+5. Deploy the image to the server
+
+```bash
+ssh ohp
+docker compose up -d
+```

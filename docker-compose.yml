@@ -3,7 +3,7 @@ services:
     #build:
     #  context: .
     #  dockerfile: Dockerfile
-    image: localhost:5000/coree:latest
+    image: registry.appelevate.cz/coree:latest
     ports:
       - "80:80"
     depends_on:
@@ -23,6 +23,12 @@ services:
 
   db:
     image: postgres:13-alpine
+    deploy:
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
