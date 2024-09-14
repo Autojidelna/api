@@ -72,3 +72,32 @@ docker push registry.appelevate.cz/coree:latest
 ssh ohp
 docker compose up -d
 ```
+
+## Setting up the alpine server
+
+1. Install docker
+
+```bash
+apk add docker
+```
+
+2. Install docker-compose
+
+```bash
+apk add docker-compose
+```
+
+3. Run cloudflare tunnel
+
+```bash
+docker run -d \
+  --restart unless-stopped \
+  --network bridge \
+  cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <your-token-here>
+```
+
+4. Run the registry
+
+```bash
+docker run -d -p 5000:5000 --restart unless-stopped --name local-registry registry:2
+```
