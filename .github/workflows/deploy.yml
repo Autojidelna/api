@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: cloudflare-pages
+      name: ssh
       url: https://api.appelevate.cz/
 
     steps:
