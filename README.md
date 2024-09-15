@@ -91,7 +91,7 @@ apk add docker-compose
 
 ```bash
 docker run -d \
-  --restart unless-stopped \
+  --restart always \
   --network bridge \
   cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <your-token-here>
 ```
@@ -99,5 +99,74 @@ docker run -d \
 4. Run the registry
 
 ```bash
-docker run -d -p 5000:5000 --restart unless-stopped --name local-registry registry:2
+mkdir registry
+cd registry
+mkdir data
+mkdir auth
+vim docker-compose.yml
+```
+
+```yaml
+version: "3"
+services:
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./auth:/auth
+      - ./data:/data
+    restart: always
+```
+
+```bash
+apk add apache2-utils
+cd auth
+htpasswd -Bc registry.password username
+cd ..
+docker-compose up -d
+cd /root/
+vim deploy_docker.sh
+```
+
+```bash
+cd /root/clone/*/
+docker compose down
+cd /root/
+rm -rf clone
+mkdir clone
+cd clone
+git clone --depth 1 git@github.com:app-elevate/CORE.go-gin-api.git
+cd */
+docker compose up -d
+```
+
+Add the github ssh key to the server
+
+```bash
+vim /root/.ssh/id_rsa
+```
+
+Add the trusted ssh client
+
+```bash
+ssh-keyscan github.com >> /root/.ssh/known_hosts
+```
+
+add the authorized key to the deployment
+
+```bash
+vim /root/.ssh/authroized_keys
+```
+
+first is the key you use to access ssh. The second one is the key that is used to deploy the docker
+
+```
+ssh-ed25519 AAAAKEY
+no-agent-forwarding,no-X11-forwarding,no-port-forwarding,no-pty,command="/root/deploy_docker.sh" ssh-ed25519 AAAAKEY
 ```
