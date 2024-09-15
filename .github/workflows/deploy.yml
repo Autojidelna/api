@@ -38,7 +38,7 @@ jobs:
         # Step 4: Add the SSH host to known hosts manually
       - name: Add SSH host to known hosts
         run: |
-          echo "${{ vars.SSH_HOST }} ${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/known_hosts
+          echo "${{ vars.SSH_HOST }} ${{ secrets.SSH_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       # Step 4: SSH into the server and execute commands
       - name: SSH into server and deploy
