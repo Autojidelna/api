@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
+    environment:
       name: cloudflare-pages
       url: https://api.appelevate.cz/
 
