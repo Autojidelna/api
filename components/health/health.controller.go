@@ -9,5 +9,5 @@ import "github.com/gin-gonic/gin"
 // @Success		200	{string}	string	"ok"
 // @Router			/health [get]
 func health(context *gin.Context) {
-	context.String(200, "ok")
+	context.String(200, "okk")
 }
