@@ -43,4 +43,4 @@ jobs:
       # Step 4: SSH into the server and execute commands
       - name: SSH into server and deploy
         run: |
-          ssh ohp "echo 'Hello, world!' > hello.txt"
+          ssh ohp
