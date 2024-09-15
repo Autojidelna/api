@@ -34,10 +34,6 @@ jobs:
           echo "  ProxyCommand cloudflared access ssh --hostname %h --client-id ${{ secrets.CLOUDFLARE_CLIENT_ID }} --client-secret ${{ secrets.CLOUDFLARE_CLIENT_SECRET }}" >> ~/.ssh/config
           chmod 600 ~/.ssh/config
 
-      - name: Add SSH host to known hosts
-        run: |
-          ssh-keyscan -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
-
       # Step 4: SSH into the server and execute commands
       - name: SSH into server and deploy
         run: |
