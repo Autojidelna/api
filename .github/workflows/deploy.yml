@@ -22,7 +22,6 @@ jobs:
 
       # Step 2: Set up SSH keys if using key-based auth
       - name: Set up SSH key
-        if: secrets.SSH_PRIVATE_KEY != ''
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
