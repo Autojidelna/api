@@ -1,7 +1,22 @@
-name: Deploy via SSH using Cloudflare Tunnel
+name: Deploy
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "**.*.go"
+      - "docs/**"
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy.yml"
+      - ".dockerignore"
+      - "components/**"
+      - "ent/**"
+      - "go.mod"
+      - "go.sum"
 
 jobs:
   build:
