@@ -6,6 +6,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      name: cloudflare-pages
+      url: https://api.appelevate.cz/
 
     steps:
       - name: Checkout code
@@ -30,6 +33,10 @@ jobs:
           echo "Host ${{ secrets.SSH_HOST }}" >> ~/.ssh/config
           echo "  ProxyCommand cloudflared access ssh --hostname %h --client-id ${{ secrets.CLOUDFLARE_CLIENT_ID }} --client-secret ${{ secrets.CLOUDFLARE_CLIENT_SECRET }}" >> ~/.ssh/config
           chmod 600 ~/.ssh/config
+
+      - name: Add SSH host to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       # Step 4: SSH into the server and execute commands
       - name: SSH into server and deploy
