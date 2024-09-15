@@ -34,9 +34,7 @@ jobs:
     environment:
       name: ssh
       url: https://api.appelevate.cz/
-    requires:
-      - build
-
+    needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
