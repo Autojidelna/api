@@ -23,7 +23,7 @@ services:
         parallelism: 1
         delay: 10s
       restart_policy:
-        condition: always
+        condition: any
 
   db:
     image: postgres:13-alpine
@@ -32,7 +32,7 @@ services:
         parallelism: 1
         delay: 10s
       restart_policy:
-        condition: always
+        condition: any
     environment:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
