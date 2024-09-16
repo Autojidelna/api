@@ -5,7 +5,10 @@ services:
     #  dockerfile: Dockerfile
     image: registry.appelevate.cz/coree:latest
     ports:
-      - "80:80"
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host  # Or "ingress"
     depends_on:
       - db
     environment:
@@ -55,8 +58,3 @@ secrets:
     external: true
 volumes:
   postgres_data:
-ports:
-  - target: 80
-    published: 8080
-    protocol: tcp
-    mode: host  # Or "ingress"
