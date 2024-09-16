@@ -151,7 +151,9 @@ func main() {
 	defer dbClient.Close()
 
 	app := setupRouter()
-	println("App is running on http://localhost")
-	app.Run(":80")
+	port := getVariable("APP_PORT", "80")
+	port = ":" + port
+	println("App is running on http://localhost" + port)
+	app.Run(port)
 
 }
