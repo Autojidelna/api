@@ -32,7 +32,7 @@ services:
         parallelism: 1
         delay: 10s
       restart_policy:
-        condition: on-failure
+        condition: always
     environment:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
@@ -45,8 +45,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart_policy:
-      condition: always
 
 secrets:
   postgres_user:
