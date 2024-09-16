@@ -11,9 +11,6 @@ package main
 // 	@tag.name	Health Check
 // 	@tag.description	Health Check for this API
 
-//	@host		localhost:8080
-//	@BasePath	/
-
 import (
 	"context"
 	dbexample "coree/components/db_example"
@@ -23,6 +20,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -65,24 +63,52 @@ func setupRouter() *gin.Engine {
 	return app
 }
 
+func getVariable(key string, defaultValue string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		value = defaultValue
+	}
+	return value
+}
+
+func getFileVariable(key string, defaultValue string) string {
+	value, ok := os.LookupEnv(key)
+	if ok {
+		valueBytes, err := os.ReadFile(value)
+		ok = err == nil
+		if ok {
+			value = string(valueBytes)
+		}
+	}
+	if !ok {
+		value = defaultValue
+	}
+	return value
+}
+
+func getIntVariable(key string, defaultValue int) int {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return defaultValue
+	}
+	intValue, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultValue
+	}
+	return intValue
+}
+
+func getCredentials() (string, int, string, string, string) {
+	dbHost := getVariable("POSTGRES_HOST", "localhost")
+	dbUser := getFileVariable("POSTGRES_USER_FILE", "postgres")
+	dbPassword := getFileVariable("POSTGRES_PASSWORD_FILE", "postgres")
+	dbName := getFileVariable("POSTGRES_DB_FILE", "postgres")
+	dbPort := getIntVariable("POSTGRES_PORT", 5432)
+	return dbHost, dbPort, dbUser, dbPassword, dbName
+}
+
 func initDatabase() {
-	dbHost, ok := os.LookupEnv("POSTGRES_HOST")
-	if !ok {
-		dbHost = "localhost"
-	}
-	dbUser, ok := os.LookupEnv("POSTGRES_USER")
-	if !ok {
-		dbUser = "postgres"
-	}
-	dbPassword, ok := os.LookupEnv("POSTGRES_PASSWORD")
-	if !ok {
-		dbPassword = "postgres"
-	}
-	dbName, ok := os.LookupEnv("POSTGRES_DB")
-	if !ok {
-		dbName = "postgres"
-	}
-	dbPort := 5432
+	dbHost, dbPort, dbUser, dbPassword, dbName := getCredentials()
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName)

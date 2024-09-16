@@ -4,7 +4,9 @@
 
 1. Download [golang](https://go.dev/dl/)
 
-2. Add go bin to your path
+2. Download and run [postgres](https://postgresapp.com/downloads.html)
+
+3. Add go bin to your path
 
 for macos/linux
 
@@ -70,7 +72,9 @@ docker push registry.appelevate.cz/coree:latest
 
 ```bash
 ssh ohp
-docker compose up -d
+# Clone the repository
+docker stack deploy --compose-file docker-compose.yml corego
+#docker stack rm corego
 ```
 
 ## Setting up the alpine server
