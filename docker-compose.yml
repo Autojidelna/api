@@ -28,6 +28,8 @@ services:
         delay: 10s
       restart_policy:
         condition: any
+    networks:
+      - mynetwork
 
   db:
     image: postgres:13-alpine
@@ -49,6 +51,8 @@ services:
       - "5432:5432"
     volumes:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
 
 secrets:
   postgres_user:
@@ -57,3 +61,7 @@ secrets:
     external: true
   postgres_db:
     external: true
+
+networks:
+  mynetwork:
+    driver: overlay
