@@ -71,8 +71,9 @@ docker push registry.appelevate.cz/coree:latest
 5. Deploy the image to the server
 
 ```bash
-ssh ohp
+ssh ohp # ssh onto the server if you have access
 # Clone the repository
+git clone ...
 docker stack deploy --compose-file docker-compose.yml corego
 #docker stack rm corego
 ```
