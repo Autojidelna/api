@@ -6,7 +6,7 @@ PERSISTENT_BACKUP_PATH="/var/psql_backups"
 
 # Perform PostgreSQL backup
 mkdir -p $BACKUP_PATH
-/usr/bin/docker exec -it $(docker ps --filter name=coree_db -q) pg_dump -U <user> -h localhost -d <db-name> > $BACKUP_PATH/$BACKUP_FILE
+/usr/bin/docker exec $(docker ps --filter name=coree_db -q) pg_dump -U <user> -h localhost -d <db-name> > $BACKUP_PATH/$BACKUP_FILE
 
 
 mkdir -p $PERSISTENT_BACKUP_PATH

@@ -190,12 +190,6 @@ echo "your-secure-password" | docker secret create postgres_password -
 echo "your-db-name" | docker secret create postgres_db -
 ```
 
-12. Spusťte deploy skript
-
-```bash
-sh /root/deploy_docker.sh
-```
-
 ### Nastavení zálohování postgresql db
 
 1. Použijte skript [backup_postgres.sh](backup_postgres.sh) a upravte v něm hodnoty v `<>`
