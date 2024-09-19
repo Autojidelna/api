@@ -119,6 +119,7 @@ apk add git
 ```bash
 cd ~/.ssh
 vim id_rsa
+chmod 600 id_rsa
 ```
 
 sem nyní vložte váš soukromý klíč, který má pouze read práva k repozitáři. (deploy klíč)
