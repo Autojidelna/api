@@ -50,6 +50,21 @@
 11. Zapněte firewall
     - zakažte inbound komunikaci
     - povolte outbound komunikaci
+12. Připojte se k ssh pomocí cloudflared (na vašem pc)
+
+    - nainstalujte [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+    - upravte ~/.ssh/config
+
+```
+Host ohp
+      HostName ssh.<your-domain>
+      ProxyCommand cloudflared access ssh --hostname %h
+      User root
+```
+
+```bash
+ssh ohp
+```
 
 ### Nastavení registry
 
