@@ -90,6 +90,7 @@ vim docker-compose.yml
 apk add apache2-utils # nainstaluje nástroj pro vytvoření hesel
 cd auth
 htpasswd -Bc registry.password username # použijte vlastní jméno. Po zadání hesla se heslo uloží do souboru registry.password
+htpasswd -B registry.password github-actions # použijte vlastní jméno. Po zadání hesla se heslo uloží do souboru registry.password
 cd ..
 docker-compose up -d
 ```
