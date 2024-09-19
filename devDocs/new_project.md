@@ -4,6 +4,9 @@
 
 1. Otevřete projekt v CORU ve vscode.
 2. přejmenujte všechny výskyty `coree` na nový název projektu.
+3. přejmenujte všechny výskyty `registry.appelevate.cz` na nový název domény.
+4. přejmenujte všechny výskyty `ssh.appelevate.cz` na nový název domény.
+5. přejmenujte všechny výskyty `api.appelevate.cz` na nový název domény.
 
 ## Nastavení alpine serveru
 
@@ -170,13 +173,7 @@ echo "your-secure-password" | docker secret create postgres_password -
 echo "your-db-name" | docker secret create postgres_db -
 ```
 
-12. stáhněte image
-
-```bash
-docker pull registry.<your-domain>.cz/<your-repo>:latest
-```
-
-13. Spusťte deploy skript
+12. Spusťte deploy skript
 
 ```bash
 sh /root/deploy_docker.sh
@@ -190,10 +187,11 @@ sh /root/deploy_docker.sh
 
 2. vytvořte nový bucket v b2 a přidejte do něj klíč aplikace
 
-3. Nainstalujte b2 cli
+3. Nainstalujte b2 cli a gpg
 
 ```bash
 apk add pipx
+apk add gnupg
 pipx install b2
 ```
 

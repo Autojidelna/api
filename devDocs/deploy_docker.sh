@@ -11,5 +11,5 @@ rm -rf /root/godocker
 mkdir -p /root/godocker/
 mv docker-compose.yml /root/godocker/
 cd /root/godocker/
-docker stack deploy --compose-file docker-compose.yml coree
+docker stack deploy --compose-file docker-compose.yml coree --with-registry-auth
 rm -rf /root/clone
