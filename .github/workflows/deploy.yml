@@ -66,7 +66,7 @@ jobs:
       # Step 3: Create SSH config with Cloudflare Access Service Token
       - name: Set up SSH config for Cloudflare Access
         run: |
-          echo "Host ohp" >> ~/.ssh/config
+          echo "Host coree" >> ~/.ssh/config
           echo "  HostName ${{ vars.SSH_HOST }}" >> ~/.ssh/config
           echo "  ProxyCommand cloudflared access ssh --hostname %h --service-token-id=${{ secrets.CLOUDFLARE_CLIENT_ID }} --service-token-secret=${{ secrets.CLOUDFLARE_CLIENT_SECRET }}" >> ~/.ssh/config
           echo "  User root" >> ~/.ssh/config
@@ -79,4 +79,4 @@ jobs:
       # Step 4: SSH into the server and execute commands
       - name: SSH into server and deploy
         run: |
-          ssh ohp
+          ssh coree

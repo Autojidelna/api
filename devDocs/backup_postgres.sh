@@ -1,11 +1,11 @@
 # Variables
 BACKUP_PATH="/var/lib/postgresql/data/myBackups"
 BACKUP_FILE="backup_$(date +%Y%m%d_%H%M%S).sql"
-BUCKET_NAME="ohp-postgres-backup"
+BUCKET_NAME="coree-postgres-backup"
 PERSISTENT_BACKUP_PATH="/var/psql_backups"
 
 # Perform PostgreSQL backup
-docker exec -it $(docker ps --filter name=corego_db -q) pg_dump -U <user> -h localhost -d <db-name> > $BACKUP_PATH/$BACKUP_FILE
+docker exec -it $(docker ps --filter name=coree_db -q) pg_dump -U <user> -h localhost -d <db-name> > $BACKUP_PATH/$BACKUP_FILE
 
 
 mkdir -p $PERSISTENT_BACKUP_PATH
