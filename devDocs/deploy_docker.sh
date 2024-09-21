@@ -11,5 +11,6 @@ rm -rf /root/godocker
 mkdir -p /root/godocker/
 mv docker-compose.yml /root/godocker/
 cd /root/godocker/
+sh /root/backup_postgres.sh
 docker stack deploy --compose-file docker-compose.yml coree --with-registry-auth
 rm -rf /root/clone

@@ -196,6 +196,10 @@ echo "your-db-name" | docker secret create postgres_db -
 
    - hlavně `<user>` a `<db-name>` a upravte bucket name pro váš nově vytvořený bucket v b2
 
+```bash
+vim backup_postgres.sh
+```
+
 2. vytvořte nový bucket v b2 a přidejte do něj klíč aplikace
 
 3. Nainstalujte b2 cli a gpg
@@ -206,10 +210,12 @@ apk add gnupg
 pipx install b2
 ```
 
-4. Přidejte klíč do b2 cli
+4. Restartujte terminal a přidejte klíč do b2 cli
 
 ```bash
-b2 account authorize <account-id> <application-key>
+exit
+ssh core
+b2 account authorize <key-id> <application-key>
 ```
 
 5. Přidejte práva pro spuštění skriptu
