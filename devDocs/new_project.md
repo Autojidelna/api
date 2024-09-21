@@ -194,7 +194,7 @@ echo "your-db-name" | docker secret create postgres_db -
 
 1. Použijte skript [backup_postgres.sh](backup_postgres.sh) a upravte v něm hodnoty v `<>`
 
-   - hlavně <user> a <db-name> a upravte bucket name pro váš nově vytvořený bucket v b2
+   - hlavně `<user>` a `<db-name>` a upravte bucket name pro váš nově vytvořený bucket v b2
 
 2. vytvořte nový bucket v b2 a přidejte do něj klíč aplikace
 
