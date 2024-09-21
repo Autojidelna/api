@@ -3,12 +3,12 @@ services:
     #build:
     #  context: .
     #  dockerfile: Dockerfile
-    image: registry.appelevate.cz/coree:latest
+    image: registry.qrn.cz/coree:latest
     ports:
       - target: 80
         published: 80
         protocol: tcp
-        mode: host  # Or "ingress"
+        mode: host # Or "ingress"
     depends_on:
       - db
     environment:

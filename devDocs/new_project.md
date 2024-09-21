@@ -4,9 +4,9 @@
 
 1. Otevřete projekt v CORU ve vscode.
 2. přejmenujte všechny výskyty `coree` na nový název projektu.
-3. přejmenujte všechny výskyty `registry.appelevate.cz` na nový název domény.
-4. přejmenujte všechny výskyty `ssh.appelevate.cz` na nový název domény.
-5. přejmenujte všechny výskyty `api.appelevate.cz` na nový název domény.
+3. přejmenujte všechny výskyty `registry.qrn.cz` na nový název domény.
+4. přejmenujte všechny výskyty `ssh.qrn.cz` na nový název domény.
+5. přejmenujte všechny výskyty `api.qrn.cz` na nový název domény.
 
 ## Nastavení alpine serveru
 
@@ -29,7 +29,7 @@
    - `rc-service docker start`
 5. [Vytvořte tunel v cloudflare](https://one.dash.cloudflare.com/)
 6. Nainstalujte cloudflare tunnel
-   - `docker run -d --restart always --network="host" cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <your-token>
+   - `docker run -d --restart always --network="host" cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <your-token>`
 7. Vytvořte 3 public hostnames
    - `api.<your-domain>.cz` - http://localhost:80
    - `registry.<your-domain>.cz` - http://localhost:5000
@@ -56,14 +56,14 @@
     - upravte ~/.ssh/config
 
 ```
-Host ohp
+Host core
       HostName ssh.<your-domain>
       ProxyCommand cloudflared access ssh --hostname %h
       User root
 ```
 
 ```bash
-ssh ohp
+ssh core
 ```
 
 ### Nastavení registry

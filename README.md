@@ -59,13 +59,13 @@ air
 3. Build the image
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t registry.appelevate.cz/coree:latest .
+docker buildx build --platform linux/amd64,linux/arm64 -t registry.qrn.cz/coree:latest .
 ```
 
 4. Push the image to the registry
 
 ```bash
-docker push registry.appelevate.cz/coree:latest
+docker push registry.qrn.cz/coree:latest
 ```
 
 5. Deploy the image to the server

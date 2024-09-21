@@ -30,21 +30,21 @@ jobs:
       - name: Log in to Docker registry
         uses: docker/login-action@v2
         with:
-          registry: registry.appelevate.cz
+          registry: registry.qrn.cz
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build --platform linux/amd64 -t registry.appelevate.cz/coree:latest .
+        run: docker build --platform linux/amd64 -t registry.qrn.cz/coree:latest .
 
       - name: Push Docker image
-        run: docker push registry.appelevate.cz/coree:latest
+        run: docker push registry.qrn.cz/coree:latest
 
   deploy:
     runs-on: ubuntu-latest
     environment:
       name: ssh
-      url: https://api.appelevate.cz/
+      url: https://api.qrn.cz/
     needs: build
     steps:
       - name: Checkout code
