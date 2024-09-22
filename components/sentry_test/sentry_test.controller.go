@@ -1,6 +1,10 @@
 package sentrytest
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 // @tags Sentry Test API
 // @Summary		Crashes the server and sends a report to Sentry
@@ -10,6 +14,6 @@ import "github.com/gin-gonic/gin"
 // @Success		200	{string}	string	"ok"
 // @Router			/sentry/crash [get]
 func testCrash(context *gin.Context) {
-	context.String(200, "crash successful")
+	context.String(http.StatusOK, "crash successful")
 	panic("y tho")
 }

@@ -18,6 +18,7 @@ services:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/firebase_admin
     secrets:
       - postgres_user
       - postgres_password
@@ -56,4 +57,6 @@ secrets:
   postgres_password:
     external: true
   postgres_db:
+    external: true
+  firebase_admin:
     external: true

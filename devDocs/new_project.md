@@ -188,6 +188,7 @@ docker swarm init
 echo "your-secure-username" | docker secret create postgres_user -
 echo "your-secure-password" | docker secret create postgres_password -
 echo "your-db-name" | docker secret create postgres_db -
+docker secret create firebase_admin /path/to/firebase-admin.json
 ```
 
 ### Nastavení zálohování postgresql db

@@ -95,7 +95,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Crash the server
+      description: Check for the health of the server
       responses:
         "200":
           description: ok
@@ -104,6 +104,45 @@ paths:
       summary: Health check for the server
       tags:
       - Health Check
+  /protected/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get the user profile information after authenticating with Firebase.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get Profile
+      tags:
+      - Protected
+  /protected/secret:
+    get:
+      consumes:
+      - text/plain
+      description: Return secret
+      responses:
+        "200":
+          description: secret
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Get A Secret if Authenticated
+      tags:
+      - Protected
   /sentry/crash:
     get:
       consumes:
@@ -119,6 +158,11 @@ paths:
       summary: Crashes the server and sends a report to Sentry
       tags:
       - Sentry Test API
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
 tags:
 - description: API for testing that the database is setup correctly
@@ -127,3 +171,5 @@ tags:
   name: Sentry Test API
 - description: Health Check for this API
   name: Health Check
+- description: Endpoints that require authentication
+  name: Protected

@@ -111,7 +111,7 @@ const docTemplate = `{
         },
         "/health": {
             "get": {
-                "description": "Crash the server",
+                "description": "Check for the health of the server",
                 "consumes": [
                     "application/json"
                 ],
@@ -122,6 +122,69 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/profile": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get the user profile information after authenticating with Firebase.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Protected"
+                ],
+                "summary": "Get Profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/secret": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Return secret",
+                "consumes": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Protected"
+                ],
+                "summary": "Get A Secret if Authenticated",
+                "responses": {
+                    "200": {
+                        "description": "secret",
                         "schema": {
                             "type": "string"
                         }
@@ -189,6 +252,13 @@ const docTemplate = `{
             }
         }
     },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
     "tags": [
         {
             "description": "API for testing that the database is setup correctly",
@@ -201,6 +271,10 @@ const docTemplate = `{
         {
             "description": "Health Check for this API",
             "name": "Health Check"
+        },
+        {
+            "description": "Endpoints that require authentication",
+            "name": "Protected"
         }
     ]
 }`

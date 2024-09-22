@@ -10,11 +10,18 @@ package main
 // 	@tag.description	Api for testing Sentry is setup correctly
 // 	@tag.name	Health Check
 // 	@tag.description	Health Check for this API
+// 	@tag.name	Protected
+// 	@tag.description	Endpoints that require authentication
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 import (
 	"context"
+	auth "coree/_auth"
 	dbexample "coree/components/db_example"
 	"coree/components/health"
+	"coree/components/secret"
 	sentrytest "coree/components/sentry_test"
 	"coree/ent"
 	"log"
@@ -49,6 +56,7 @@ func setupRouter() *gin.Engine {
 	dbexample.Register(app, dbClient)
 	sentrytest.Register(app)
 	health.Register(app)
+	secret.Register(app)
 
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("Gin is running in debug mode creating swagger docs")
@@ -148,6 +156,7 @@ func initSentry() {
 func main() {
 	initSentry()
 	initDatabase()
+	auth.InitFirebase()
 	defer dbClient.Close()
 
 	app := setupRouter()

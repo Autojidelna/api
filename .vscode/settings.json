@@ -2,24 +2,14 @@
   "emeraldwalk.runonsave": {
     "commands": [
       {
-        "match": "\\.controller.go$",
-        "isAsync": true,
-        "cmd": "~/go/bin/swag init"
-      },
-      {
-        "match": "\\.module.go$",
-        "isAsync": true,
-        "cmd": "~/go/bin/swag init"
-      },
-      {
-        "match": "main.go$",
-        "isAsync": true,
-        "cmd": "~/go/bin/swag init"
-      },
-      {
-        "match": "ent.*.go$",
+        "match": "*.go$",
         "isAsync": true,
         "cmd": "/usr/local/go/bin/go generate ./ent"
+      },
+      {
+        "match": "*.go$",
+        "isAsync": true,
+        "cmd": "~/go/bin/swag init"
       }
     ]
   }
