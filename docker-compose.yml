@@ -23,6 +23,7 @@ services:
       - postgres_user
       - postgres_password
       - postgres_db
+      - firebase_admin
     deploy:
       update_config:
         parallelism: 1
