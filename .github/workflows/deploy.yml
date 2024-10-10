@@ -20,7 +20,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     environment:
       name: docker
     steps:
@@ -41,7 +41,7 @@ jobs:
         run: docker push registry.qrn.cz/coree:latest
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     environment:
       name: ssh
       url: https://api.qrn.cz/
