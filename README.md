@@ -26,8 +26,16 @@ setx PATH "%PATH%;C:\Go\bin"
 setx PATH "%PATH%;%USERPROFILE%\go\bin"
 ```
 
+after that install air with:
+
 ```bash
 go install github.com/air-verse/air@latest
+```
+
+create a temp directory for go executables
+
+```bash
+sudo mkdir -p /usr/local/go/bin/tmp
 ```
 
 After that just run the project with
