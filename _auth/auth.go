@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var firebaseClient *firebase.App
+var FirebaseClient *firebase.App
 var authClient *auth.Client
 
 func InitFirebase() {
@@ -27,13 +27,15 @@ func InitFirebase() {
 	if err != nil {
 		if gin.DebugMode == "debug" {
 			log.Println("Failed to get Firebase Auth client: %v\n", err)
+		} else {
+			log.Fatalf("Failed to get Firebase Auth client: %v", err)
 		}
-		log.Fatalf("Failed to get Firebase Auth client: %v", err)
 	}
 	authClient = authyClient
-	firebaseClient = client
+	FirebaseClient = client
 }
 
+// Is user logged in to firebase?
 func FirebaseAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the Authorization header
