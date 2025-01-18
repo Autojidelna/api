@@ -3,8 +3,8 @@
 package ent
 
 import (
+	"autojidelna/ent/user"
 	"context"
-	"coree/ent/user"
 	"errors"
 	"fmt"
 

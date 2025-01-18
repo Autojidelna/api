@@ -129,69 +129,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/protected/profile": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get the user profile information after authenticating with Firebase.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Protected"
-                ],
-                "summary": "Get Profile",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/protected/secret": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Return secret",
-                "consumes": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "Protected"
-                ],
-                "summary": "Get A Secret if Authenticated",
-                "responses": {
-                    "200": {
-                        "description": "secret",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/sentry/crash": {
             "get": {
                 "description": "Crash the server",
@@ -285,7 +222,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "APPE COREE example server",
+	Title:            "APPE autojidelna example server",
 	Description:      "This is an example for all api server projects in App Elevate",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

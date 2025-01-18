@@ -1,6 +1,6 @@
 package main
 
-//	@title			APPE COREE example server
+//	@title			APPE autojidelna example server
 //	@version		1.0
 //	@description	This is an example for all api server projects in App Elevate
 
@@ -17,13 +17,11 @@ package main
 // @name Authorization
 
 import (
+	dbexample "autojidelna/components/db_example"
+	"autojidelna/components/health"
+	sentrytest "autojidelna/components/sentry_test"
+	"autojidelna/ent"
 	"context"
-	auth "coree/_auth"
-	dbexample "coree/components/db_example"
-	"coree/components/health"
-	"coree/components/secret"
-	sentrytest "coree/components/sentry_test"
-	"coree/ent"
 	"log"
 	"net/http"
 	"os"
@@ -37,7 +35,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	_ "coree/docs"
+	_ "autojidelna/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -56,7 +54,6 @@ func setupRouter() *gin.Engine {
 	dbexample.Register(app, dbClient)
 	sentrytest.Register(app)
 	health.Register(app)
-	secret.Register(app)
 
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("Gin is running in debug mode creating swagger docs")
@@ -156,7 +153,6 @@ func initSentry() {
 func main() {
 	initSentry()
 	initDatabase()
-	auth.InitFirebase()
 	defer dbClient.Close()
 
 	app := setupRouter()

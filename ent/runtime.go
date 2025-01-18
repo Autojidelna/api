@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"coree/ent/schema"
-	"coree/ent/user"
+	"autojidelna/ent/schema"
+	"autojidelna/ent/user"
 
 	"github.com/google/uuid"
 )

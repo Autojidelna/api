@@ -1,7 +1,7 @@
 package dbexample
 
 import (
-	"coree/ent"
+	"autojidelna/ent"
 
 	"github.com/gin-gonic/gin"
 )

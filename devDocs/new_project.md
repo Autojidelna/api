@@ -3,10 +3,10 @@
 ## Přejmenování projektu
 
 1. Otevřete projekt v CORU ve vscode.
-2. přejmenujte všechny výskyty `coree` na nový název projektu.
-3. přejmenujte všechny výskyty `registry.qrn.cz` na nový název domény.
-4. přejmenujte všechny výskyty `ssh.qrn.cz` na nový název domény.
-5. přejmenujte všechny výskyty `api.qrn.cz` na nový název domény.
+2. přejmenujte všechny výskyty `autojidelna` na nový název projektu.
+3. přejmenujte všechny výskyty `registry.autojidelna.cz` na nový název domény.
+4. přejmenujte všechny výskyty `ssh.autojidelna.cz` na nový název domény.
+5. přejmenujte všechny výskyty `api.autojidelna.cz` na nový název domény.
 
 ## Nastavení alpine serveru
 
@@ -56,14 +56,14 @@
     - upravte ~/.ssh/config
 
 ```
-Host core
+Host autojidelna
       HostName ssh.<your-domain>
       ProxyCommand cloudflared access ssh --hostname %h
       User root
 ```
 
 ```bash
-ssh core
+ssh autojidelna
 ```
 
 ### Nastavení registry
@@ -215,7 +215,7 @@ pipx install b2
 
 ```bash
 exit
-ssh core
+ssh autojidelna
 b2 account authorize <key-id> <application-key>
 ```
 

@@ -2,8 +2,8 @@ package dbexample
 
 import (
 	"context"
-	"coree/ent"
-	"coree/ent/user"
+	"autojidelna/ent"
+	"autojidelna/ent/user"
 	"fmt"
 	"log"
 )

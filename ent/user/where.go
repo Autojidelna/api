@@ -3,7 +3,7 @@
 package user
 
 import (
-	"coree/ent/predicate"
+	"autojidelna/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"

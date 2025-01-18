@@ -3,9 +3,9 @@
 package ent
 
 import (
+	"autojidelna/ent/predicate"
+	"autojidelna/ent/user"
 	"context"
-	"coree/ent/predicate"
-	"coree/ent/user"
 	"fmt"
 	"math"
 

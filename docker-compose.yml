@@ -3,7 +3,7 @@ services:
     #build:
     #  context: .
     #  dockerfile: Dockerfile
-    image: registry.qrn.cz/coree:latest
+    image: registry.autojidelna.cz/autojidelna:latest
     ports:
       - target: 80
         published: 80

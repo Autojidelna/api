@@ -1,4 +1,4 @@
-module coree
+module autojidelna
 
 go 1.23.1
 

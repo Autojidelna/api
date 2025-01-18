@@ -3,7 +3,7 @@
 package ent
 
 import (
-	"coree/ent/user"
+	"autojidelna/ent/user"
 	"fmt"
 	"strings"
 

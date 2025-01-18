@@ -1,4 +1,4 @@
-# CORE example api
+# autojidelna example api
 
 ## Running the project
 
@@ -67,18 +67,18 @@ air
 3. Build the image
 
 ```bash
-docker buildx build --platform linux/amd64,linux/arm64 -t registry.qrn.cz/coree:latest .
+docker buildx build --platform linux/amd64,linux/arm64 -t registry.autojidelna.cz/autojidelna:latest .
 ```
 
 4. Push the image to the registry
 
 ```bash
-docker push registry.qrn.cz/coree:latest
+docker push registry.autojidelna.cz/autojidelna:latest
 ```
 
 5. Deploy the image to the server
 
 ```bash
-ssh coree # ssh onto the server if you have access
+ssh autojidelna # ssh onto the server if you have access
 sh deploy_docker.sh
 ```

@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is an example for all api server projects in App Elevate",
-        "title": "APPE COREE example server",
+        "title": "APPE autojidelna example server",
         "contact": {},
         "version": "1.0"
     },
@@ -114,69 +114,6 @@
                 "responses": {
                     "200": {
                         "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/protected/profile": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get the user profile information after authenticating with Firebase.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Protected"
-                ],
-                "summary": "Get Profile",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/protected/secret": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Return secret",
-                "consumes": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "Protected"
-                ],
-                "summary": "Get A Secret if Authenticated",
-                "responses": {
-                    "200": {
-                        "description": "secret",
                         "schema": {
                             "type": "string"
                         }

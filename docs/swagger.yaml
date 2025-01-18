@@ -25,7 +25,7 @@ definitions:
 info:
   contact: {}
   description: This is an example for all api server projects in App Elevate
-  title: APPE COREE example server
+  title: APPE autojidelna example server
   version: "1.0"
 paths:
   /db/user:
@@ -104,45 +104,6 @@ paths:
       summary: Health check for the server
       tags:
       - Health Check
-  /protected/profile:
-    get:
-      consumes:
-      - application/json
-      description: Get the user profile information after authenticating with Firebase.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Get Profile
-      tags:
-      - Protected
-  /protected/secret:
-    get:
-      consumes:
-      - text/plain
-      description: Return secret
-      responses:
-        "200":
-          description: secret
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: Get A Secret if Authenticated
-      tags:
-      - Protected
   /sentry/crash:
     get:
       consumes:

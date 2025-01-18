@@ -3,8 +3,8 @@
 package hook
 
 import (
+	"autojidelna/ent"
 	"context"
-	"coree/ent"
 	"fmt"
 )
 

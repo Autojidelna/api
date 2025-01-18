@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"coree/ent"
+	"autojidelna/ent"
 	// required by schema hooks.
-	_ "coree/ent/runtime"
+	_ "autojidelna/ent/runtime"
 
-	"coree/ent/migrate"
+	"autojidelna/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )
