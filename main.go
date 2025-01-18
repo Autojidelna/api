@@ -55,15 +55,10 @@ func setupRouter() *gin.Engine {
 	sentrytest.Register(app)
 	health.Register(app)
 
-	if gin.Mode() == gin.DebugMode {
-		fmt.Println("Gin is running in debug mode creating swagger docs")
-		app.GET("/", func(context *gin.Context) {
-			context.Redirect(http.StatusTemporaryRedirect, "/docs/index.html")
-		})
-		app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	} else {
-		fmt.Println("Gin is running in release mode")
-	}
+	app.GET("/", func(context *gin.Context) {
+		context.Redirect(http.StatusTemporaryRedirect, "/docs/index.html")
+	})
+	app.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return app
 }
