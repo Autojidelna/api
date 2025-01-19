@@ -20,6 +20,7 @@ import (
 	dbexample "autojidelna/components/db_example"
 	"autojidelna/components/health"
 	sentrytest "autojidelna/components/sentry_test"
+	testingapi "autojidelna/components/testing_api"
 	"autojidelna/ent"
 	"context"
 	"log"
@@ -51,6 +52,7 @@ func setupRouter() *gin.Engine {
 	}))
 
 	// register modules
+	testingapi.Register(app)
 	dbexample.Register(app, dbClient)
 	sentrytest.Register(app)
 	health.Register(app)

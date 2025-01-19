@@ -143,6 +143,54 @@
                     }
                 }
             }
+        },
+        "/testing": {
+            "get": {
+                "description": "Redirects from the root URL to login or day page.",
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Root URL redirections",
+                "responses": {
+                    "300": {
+                        "description": "Multiple Choices"
+                    }
+                }
+            }
+        },
+        "/testing/faces/secured/main.jsp": {
+            "get": {
+                "description": "Day",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Day",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/testing/j_spring_security_check": {
+            "post": {
+                "description": "Security",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Security",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {

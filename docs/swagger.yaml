@@ -119,6 +119,37 @@ paths:
       summary: Crashes the server and sends a report to Sentry
       tags:
       - Sentry Test API
+  /testing:
+    get:
+      description: Redirects from the root URL to login or day page.
+      responses:
+        "300":
+          description: Multiple Choices
+      summary: Root URL redirections
+      tags:
+      - Testing API
+  /testing/faces/secured/main.jsp:
+    get:
+      description: Day
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+      summary: Day
+      tags:
+      - Testing API
+  /testing/j_spring_security_check:
+    post:
+      consumes:
+      - application/json
+      description: Security
+      responses:
+        "200":
+          description: OK
+      summary: Security
+      tags:
+      - Testing API
 securityDefinitions:
   ApiKeyAuth:
     in: header
