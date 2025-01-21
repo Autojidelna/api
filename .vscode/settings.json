@@ -1,16 +1,15 @@
 {
   "emeraldwalk.runonsave": {
-
     "commands": [
       {
         "match": ".*go$",
         "isAsync": true,
-        "cmd": "go generate ./ent && swag init"
+        "cmd": "/usr/local/go/bin/go generate ./ent && ~/go/bin/swag init"
       },
       {
         "match": ".*go$",
         "isAsync": true,
-        "cmd": "swag init"
+        "cmd": "~/go/bin/swag init"
       }
     ]
   }

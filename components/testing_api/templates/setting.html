@@ -1,0 +1,471 @@
+<html>
+<head>
+    <title>iCanteen - objednání stravy</title>
+</head>
+<body>
+    <form name="reader" id="reader" style="margin:0px; display:inline;" method="POST"
+        action="/logout?terminal=true&amp;keyboard=null&amp;printer=null">
+        <input type="hidden" name="code" id="code">
+        <input type="hidden" name="_csrf" value="14bb9f0f-5da3-4302-9d47-9f8448335b50" />
+    </form>
+    <div id="bodyContext" style="height: 100%;">
+        <div class="noPrint topContext" id="topContext">
+            <div class="topMenu topMenuMinWidth" style="padding-top: 0px; padding-bottom: 0px" role="banner">
+                <table style="width: 100%;">
+                    <tr>
+                        <td class="statusBar statusBarMain">
+                            <span class="topMenuItem">čas: <span id="Clock"
+                                    style="font-weight: bold;">06:30.05</span></span>
+                            <span id="kreditInclude">
+                                <span class="topMenuItem"> <span
+                                        title="Průběžně aktualizovaný kredit, který zahrnuje všechny objednávky i na období budoucí. ">kredit</span>:
+                                    <span id="Kredit" tabindex="0" style="font-weight: bold; color: #99cc00;"
+                                        title="700,00 limit účtu je&nbsp;0,00">700,00&nbsp;Kč</span>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="statusBar statusBarMain">
+                        </td>
+                        <td class="statusBar statusBarRight">
+                            <a href="javascript:window.print()" title="Vytisknout stránku"><i
+                                    class="topMenuItem fa fa-print fa-lg"></i></a>
+                            <a href="/web/info" title="Informace o jídelně"><i
+                                    class="topMenuItem fa fa-info-circle fa-lg"></i></a>
+                            <a href="/web/audit" title="Audit log operací v systému"><i
+                                    class="topMenuItem fa fa-file-alt fa-lg"></i></a>
+                            <a href="/web/setting" title="Možnosti nastavení systému"><i
+                                    class="topMenuItem fa fa-cog fa-lg"></i></a>
+                            <a href="/web/messages" title="Zprávy od jídelny"><span class="topMenuItem"><i
+                                        class=" fa fa-envelope fa-lg"></i></span></a>
+                            <span class="topMenuItem" title="Přihlašovací jméno: NULL"><span
+                                    id="top:status:firstName">Pavel</span>&nbsp;<span
+                                    id="top:status:lastName">DOBIÁŠ</span></span>
+                            <span><a href="#" onclick="document.getElementById('logout').submit();"
+                                    title="Odhlášení uživatele ze systému"><i
+                                        class="topMenuItem fa fa-sign-out-alt fa-lg warning"></i></a></span>
+                            <form name="logout" id="logout" method="POST"
+                                action="/logout?terminal=false&amp;keyboard=null&amp;printer=null">
+                                <input type="hidden" name="_csrf" value="14bb9f0f-5da3-4302-9d47-9f8448335b50" />
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="topMenu topMenuMinWidth noPrint" role="navigation">
+                <table width="100%" border="0" cellspacing="2" cellpadding="0" style="table-layout: fixed;">
+                    <tr>
+                        <td class="mainMenu" title="Jídelníček na jeden den s měsíčním kalendářem"><a
+                                href="/faces/secured/main.jsp"><span class="mainMenuItem"><i
+                                        class="far fa-calendar-day fa-2x"></i><span
+                                        class="mainMenuText">denní</span></span></a></td>
+                        <td class="mainMenu" title="Jídelníček na jeden den s týdenním kalendářem"><a
+                                href="/faces/secured/week.jsp?week=0&amp;terminal=false&amp;keyboard=null&amp;printer=null"><span
+                                    class="mainMenuItem"><i class="far fa-calendar-week fa-2x"></i><span
+                                        class="mainMenuText">týdenní</span></span></a></td>
+                        <td class="mainMenu" title="Jídelníček se všemi schválenými dny"><a
+                                href="/faces/secured/month.jsp"><span class="mainMenuItem"><i
+                                        class="far fa-calendar-alt fa-2x"></i><span
+                                        class="mainMenuText">měsíční</span></span></a></td>
+                        <td class="mainMenu" title="Můžete převzít jídlo jiného strávníka z burzy jídel"><a
+                                href="/faces/secured/burza.jsp"><span class="mainMenuItem"><i
+                                        class="fa fa-chart-line fa-2x"></i><span
+                                        class="mainMenuText">burza</span></span></a></td>
+                        <td class="mainMenu" title="Historie plateb"><a href="/faces/secured/platby.jsp"><span
+                                    class="mainMenuItem"><i class="far fa-money-bill-alt fa-2x"></i><span
+                                        class="mainMenuText">platby</span></span></a></td>
+                        <td class="mainMenu" title="Detaily objednávek včetně popisu jídla"><a
+                                href="/faces/secured/objednavky.jsp"><span class="mainMenuItem"><i
+                                        class="far fa-shopping-cart fa-2x"></i><span
+                                        class="mainMenuText">objednávky</span></span></a></td>
+                        <td class="mainMenu" title="Přehled plateb a objednávek"><a
+                                href="/faces/secured/historie.jsp"><span class="mainMenuItem"><i
+                                        class="far fa-history fa-2x"></i><span
+                                        class="mainMenuText">historie</span></span></a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bkg"></div>
+        </div>
+        <div class="mainContext mainContextMinWidth" id="mainContext">
+            <form id="alergens" name="alergens" method="post" action="/web/setting"
+                enctype="application/x-www-form-urlencoded" style="text-align: left;" class="hr">
+                <table style="text-align: left; width: 100%" class="medium">
+                    <thead>
+                        <tr>
+                            <th class="subtitlebig" scope="colgroup" colspan="2">
+                                <span style="text-align: left;"><span
+                                        title="Skrýt či zvýraznit vaše alergeny.">Nastavení alergenů</span></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="subtitle"><span style="text-align: left;">
+                                    <table id="alergens:alergenyFirst" style="text-align: left;">
+                                        <tbody id="alergens:alergenyFirst:tbody_element">
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:0:showAlergens"
+                                                        id="alergens:alergenyFirst:0:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:0:showAlergens"> 1 - Obiloviny -
+                                                        Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z
+                                                        nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:1:showAlergens"
+                                                        id="alergens:alergenyFirst:1:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:1:showAlergens"> 1a - Pšenice -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:2:showAlergens"
+                                                        id="alergens:alergenyFirst:2:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:2:showAlergens"> 1b - Žito -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:3:showAlergens"
+                                                        id="alergens:alergenyFirst:3:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:3:showAlergens"> 1c - Ječmen -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:4:showAlergens"
+                                                        id="alergens:alergenyFirst:4:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:4:showAlergens"> 1d - Oves -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:5:showAlergens"
+                                                        id="alergens:alergenyFirst:5:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:5:showAlergens"> 1e - Špalda -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> — <input type="checkbox"
+                                                        name="alergens:alergenyFirst:6:showAlergens"
+                                                        id="alergens:alergenyFirst:6:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:6:showAlergens"> 1f - Kamut -
+                                                        Obiloviny obsahující lepek nebo jejich hybridní odrůdy a výrobky
+                                                        z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:7:showAlergens"
+                                                        id="alergens:alergenyFirst:7:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:7:showAlergens"> 2 - Korýši - Korýši
+                                                        a výrobky z nich - patří mezi potraviny ohrožující
+                                                        život</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:8:showAlergens"
+                                                        id="alergens:alergenyFirst:8:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:8:showAlergens"> 3 - Vejce - Vejce a
+                                                        výrobky z nich - patří mezi potraviny ohrožující
+                                                        život</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:9:showAlergens"
+                                                        id="alergens:alergenyFirst:9:showAlergens" value="true" /><label
+                                                        for="alergens:alergenyFirst:9:showAlergens"> 4 - Ryby - Ryby a
+                                                        výrobky z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:10:showAlergens"
+                                                        id="alergens:alergenyFirst:10:showAlergens"
+                                                        value="true" /><label
+                                                        for="alergens:alergenyFirst:10:showAlergens"> 5 - Podzemnice
+                                                        olejná (arašídy) - Podzemnice olejná (arašídy) a výrobky z nich
+                                                        - patří mezi potraviny ohrožující život</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:11:showAlergens"
+                                                        id="alergens:alergenyFirst:11:showAlergens"
+                                                        value="true" /><label
+                                                        for="alergens:alergenyFirst:11:showAlergens"> 6 - Sójové boby
+                                                        (sója) - Sójové boby (sója) a výrobky z nich</label><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="alergens:alergenyFirst:12:showAlergens"
+                                                        id="alergens:alergenyFirst:12:showAlergens"
+                                                        value="true" /><label
+                                                        for="alergens:alergenyFirst:12:showAlergens"> 7 - Mléko - Mléko
+                                                        a výrobky z něj - patří mezi potraviny ohrožující
+                                                        život</label><br />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </span></td>
+                            <td class="medium">
+                                <table id="alergens:alergenySecond" style="text-align: left;">
+                                    <tbody id="alergens:alergenySecond:tbody_element">
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:0:showAlergens"
+                                                    id="alergens:alergenySecond:0:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:0:showAlergens"> 8 - Skořápkové plody -
+                                                    Skořápkové plody a výrobky z nich – jedná se o všechny druhy
+                                                    ořechů</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:1:showAlergens"
+                                                    id="alergens:alergenySecond:1:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:1:showAlergens"> 8a - Mandle -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:2:showAlergens"
+                                                    id="alergens:alergenySecond:2:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:2:showAlergens"> 8b - Lískové ořechy -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:3:showAlergens"
+                                                    id="alergens:alergenySecond:3:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:3:showAlergens"> 8c - Vlašské ořechy -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:4:showAlergens"
+                                                    id="alergens:alergenySecond:4:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:4:showAlergens"> 8d - Kešu ořechy -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:5:showAlergens"
+                                                    id="alergens:alergenySecond:5:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:5:showAlergens"> 8e - Pekanové ořechy -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:6:showAlergens"
+                                                    id="alergens:alergenySecond:6:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:6:showAlergens"> 8f - Para ořechy -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:7:showAlergens"
+                                                    id="alergens:alergenySecond:7:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:7:showAlergens"> 8g - Pistácie -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> — <input type="checkbox" name="alergens:alergenySecond:8:showAlergens"
+                                                    id="alergens:alergenySecond:8:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:8:showAlergens"> 8h - Makadamie -
+                                                    Skořápkové plody a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:9:showAlergens"
+                                                    id="alergens:alergenySecond:9:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:9:showAlergens"> 9 - Celer - Celer a
+                                                    výrobky z něj</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:10:showAlergens"
+                                                    id="alergens:alergenySecond:10:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:10:showAlergens"> 10 - Hořčice -
+                                                    Hořčice a výrobky z ní</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:11:showAlergens"
+                                                    id="alergens:alergenySecond:11:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:11:showAlergens"> 11 - Sezamová semena
+                                                    (sezam) - Sezamová semena (sezam) a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:12:showAlergens"
+                                                    id="alergens:alergenySecond:12:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:12:showAlergens"> 12 - Oxid siřičitý a
+                                                    siřičitany - Oxid siřičitý a siřičitany v koncentracích vyšších než
+                                                    10 mg, ml/kg, l, vyjádřeno SO2</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:13:showAlergens"
+                                                    id="alergens:alergenySecond:13:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:13:showAlergens"> 13 - Vlčí bob
+                                                    (LUPINA) - Vlčí bob (LUPINA) a výrobky z něj</label><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="alergens:alergenySecond:14:showAlergens"
+                                                    id="alergens:alergenySecond:14:showAlergens" value="true" /><label
+                                                    for="alergens:alergenySecond:14:showAlergens"> 14 - Měkkýši -
+                                                    Měkkýši a výrobky z nich</label><br />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="subtitle"><select name="alergens:j_id_jsp_1530548445_48pc4" size="1">
+                                    <option value="1">Nezobrazovat alergeny</option>
+                                    <option value="2" selected="selected">Zobrazovat všechny šedě</option>
+                                    <option value="3">Zobrazovat moje výrazně ostatní šedě</option>
+                                    <option value="4">Zobrazovat jen moje šedě</option>
+                                    <option value="5">Zobrazovat jen moje výrazně</option>
+                                </select></td>
+                            <td class="medium"><input id="alergens:confirm" name="alergens:confirm" type="submit"
+                                    value="Uložit" class="btn btn-primary button" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="_csrf" value="14bb9f0f-5da3-4302-9d47-9f8448335b50" />
+                <input type="hidden" name="alergens_SUBMIT" value="1" /><input type="hidden"
+                    name="javax.faces.ViewState" id="javax.faces.ViewState"
+                    value="rC6Jcx7wzWiAfBYy/JPaHxdsklB9k9iNJEdK1h0mJnT+gCGOnwglVwrUaAKEnTQ6ObjhshsQZbW2yLwyOtbM5H+WAI3SZTm0MgvnhbtOtL4nBBolIn/lglhlPxqx/ZwddyQ1AA==" />
+            </form>
+            <form id="stravnikUdaje" name="stravnikUdaje" method="post" action="/web/setting"
+                enctype="application/x-www-form-urlencoded" class="hr">
+                <table cellpadding="15" cellspacing="15" class="medium hr">
+                    <thead>
+                        <tr>
+                            <th class="subtitlebig" scope="colgroup" colspan="2">
+                                Nastavení údajů
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="subtitle">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Základní údaje strávníka</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>příjmení: <b>DOBIÁŠ</b></td>
+                                        <td>jméno: <b>Pavel</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>datum narození: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>kategorie: <b>Žáci - SPŠ</b></td>
+                                        <td>skupina: <b>Studenti</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>třída: <b>4.D</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>osobní číslo: <b></b></td>
+                                        <td>evidenční číslo: <b></b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="medium">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">kontaktní údaje</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>adresa: <b></b></td>
+                                        <td>město: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>PSČ: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>telefon: <b></b></td>
+                                        <td>e-mail: <b></b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="subtitle">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Bankovní údaje</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">variabilní symbol: <b>21101901</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">specifický symbol: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">účet pro platby do jídelny: <b>2003710015/6000</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">účet pro vracení přeplatků jídelnou: <b>/</b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="medium">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Nastavení stravovacích zvyklostí</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">volný účet:
+                                            ne</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">limit volného účtu: 0.0 Kč</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">hromadný strávník:
+                                            ne
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="_csrf" value="14bb9f0f-5da3-4302-9d47-9f8448335b50" />
+                <input type="hidden" name="stravnikUdaje_SUBMIT" value="1" /><input type="hidden"
+                    name="javax.faces.ViewState" id="javax.faces.ViewState"
+                    value="rC6Jcx7wzWiAfBYy/JPaHxdsklB9k9iNJEdK1h0mJnT+gCGOnwglVwrUaAKEnTQ6ObjhshsQZbW2yLwyOtbM5H+WAI3SZTm0MgvnhbtOtL4nBBolIn/lglhlPxqx/ZwddyQ1AA==" />
+            </form>
+            <div class="help noPrint" title="Zobrazí nápovědu a popis funkcí programu"><a href="help.jspx"><i
+                        class="fa fa-question fa-2x"></i></a></div>
+            <div align="center" class="topMenu topMenuMinWidth bottomBar textGrey noPrint" role="contentinfo"> Změna
+                jídelníčku vyhrazena. | iCanteen 2.18.03
+
+                | <span class="topMenuItem">poslední přihlášení: <span id="PoslLogin"
+                        style="font-weight: bold;">2025-01-20 13:03:10.0 IP: 37.188.182.26</span></span>
+                | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021 | <a href="mobile.jsp"><i
+                        class="far fa-mobile"></i> Mobilní zobrazení</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
