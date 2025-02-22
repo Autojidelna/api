@@ -119,6 +119,86 @@ paths:
       summary: Crashes the server and sends a report to Sentry
       tags:
       - Sentry Test API
+  /testing:
+    get:
+      description: Redirects from the root URL to login or day page.
+      responses:
+        "300":
+          description: Multiple Choices
+      summary: Root URL redirections
+      tags:
+      - Testing API
+  /testing/faces/login.jsp:
+    get:
+      description: Login
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+      summary: Login
+      tags:
+      - Testing API
+  /testing/faces/secured/burza.jsp:
+    get:
+      description: Burza
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+      summary: Burza
+      tags:
+      - Testing API
+  /testing/faces/secured/main.jsp:
+    get:
+      description: Day
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+      summary: Day
+      tags:
+      - Testing API
+  /testing/faces/secured/month.jsp:
+    get:
+      description: Month
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+      summary: Month
+      tags:
+      - Testing API
+  /testing/j_spring_security_check:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Security
+      parameters:
+      - description: Username for login
+        in: formData
+        name: j_username
+        required: true
+        type: string
+      - description: Password for login
+        in: formData
+        name: j_password
+        required: true
+        type: string
+      - description: CSRF token
+        in: formData
+        name: _csrf
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      summary: Security
+      tags:
+      - Testing API
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -1,0 +1,138 @@
+<html>
+<head>
+    <title>iCanteen - objednání stravy</title>
+    <!-- Stripped Down HTML of /web/setting page. Only contains the neccessary structure with the expected data.-->
+</head>
+<body>
+    <div id="bodyContext" style="height: 100%;">
+        <div id="topContext" class="noPrint topContext">
+            <div class="topMenu topMenuMinWidth" style="padding-top: 0px; padding-bottom: 0px" role="banner">
+                <table style="width: 100%;">
+                    <tr>
+                        <td class="statusBar statusBarMain">
+                            <span class="topMenuItem">čas: <span id="Clock"
+                                    style="font-weight: bold;">00:00.00</span></span>
+                            <span id="kreditInclude">
+                                <span class="topMenuItem"> <span
+                                        title="Průběžně aktualizovaný kredit, který zahrnuje všechny objednávky i na období budoucí. ">kredit</span>:
+                                    <span id="Kredit" tabindex="0" style="font-weight: bold; color: #99cc00;"
+                                        title="{{ .Credit }} limit účtu je&nbsp;0,00">{{ .Credit }}&nbsp;Kč</span>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="mainContext mainContextMinWidth" id="mainContext">
+            <form id="stravnikUdaje" name="stravnikUdaje" method="post" action="/web/setting"
+                enctype="application/x-www-form-urlencoded" class="hr">
+                <table cellpadding="15" cellspacing="15" class="medium hr">
+                    <thead>
+                        <tr>
+                            <th class="subtitlebig" scope="colgroup" colspan="2">
+                                Nastavení údajů
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="subtitle">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Základní údaje strávníka</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>příjmení: <b>SKUTEČNÝ</b></td>
+                                        <td>jméno: <b>Jarmil</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>datum narození: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>kategorie: <b>Žáci - SPŠ</b></td>
+                                        <td>skupina: <b>Studenti</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>třída: <b>4.D</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>osobní číslo: <b></b></td>
+                                        <td>evidenční číslo: <b></b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="medium">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">kontaktní údaje</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>adresa: <b></b></td>
+                                        <td>město: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td></td>
+                                        <td>PSČ: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td>telefon: <b></b></td>
+                                        <td>e-mail: <b></b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="subtitle">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Bankovní údaje</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">variabilní symbol: <b>21101901</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">specifický symbol: <b></b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">účet pro platby do jídelny: <b>2003710015/6000</b></td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">účet pro vracení přeplatků jídelnou: <b>/</b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="medium">
+                                <table class="table" style="text-align: left;" cellpadding="5" cellspacing="5">
+                                    <tr class="smallBoldTitle">
+                                        <td colspan="2">Nastavení stravovacích zvyklostí</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">volný účet:
+                                            ne</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">limit volného účtu: 0.0 Kč</td>
+                                    </tr>
+                                    <tr class="tableRow">
+                                        <td colspan="2">hromadný strávník:
+                                            ne
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="_csrf" value="14bb9f0f-5da3-4302-9d47-9f8448335b50" />
+                <input type="hidden" name="stravnikUdaje_SUBMIT" value="1" /><input type="hidden"
+                    name="javax.faces.ViewState" id="javax.faces.ViewState"
+                    value="rC6Jcx7wzWiAfBYy/JPaHxdsklB9k9iNJEdK1h0mJnT+gCGOnwglVwrUaAKEnTQ6ObjhshsQZbW2yLwyOtbM5H+WAI3SZTm0MgvnhbtOtL4nBBolIn/lglhlPxqx/ZwddyQ1AA==" />
+            </form>
+            {{ .Footer }}
+        </div>
+    </div>
+</body>
+</html>

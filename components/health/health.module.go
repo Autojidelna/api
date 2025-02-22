@@ -4,6 +4,5 @@ import "github.com/gin-gonic/gin"
 
 // Api for testing Sentry is setup correctly
 func Register(router *gin.Engine) {
-	router.GET("/healthz", health)
 	router.GET("/health", health)
 }

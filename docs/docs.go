@@ -151,6 +151,128 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/testing": {
+            "get": {
+                "description": "Redirects from the root URL to login or day page.",
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Root URL redirections",
+                "responses": {
+                    "300": {
+                        "description": "Multiple Choices"
+                    }
+                }
+            }
+        },
+        "/testing/faces/login.jsp": {
+            "get": {
+                "description": "Login",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Login",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/testing/faces/secured/burza.jsp": {
+            "get": {
+                "description": "Burza",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Burza",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/testing/faces/secured/main.jsp": {
+            "get": {
+                "description": "Day",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Day",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/testing/faces/secured/month.jsp": {
+            "get": {
+                "description": "Month",
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Month",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/testing/j_spring_security_check": {
+            "post": {
+                "description": "Security",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "tags": [
+                    "Testing API"
+                ],
+                "summary": "Security",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username for login",
+                        "name": "j_username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password for login",
+                        "name": "j_password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "CSRF token",
+                        "name": "_csrf",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
