@@ -140,9 +140,9 @@ func buildMeals(date time.Time, meals []LunchMeal) string {
                         title="výdej&nbsp;od:&nbsp;<b>11:00:00</b>&nbsp;do:&nbsp;<b>14:40:00</b><br/> objednat&nbsp;do:&nbsp;<b>20.01.2025 15:00:00</b><br/> zrušit&nbsp;do:&nbsp;<b>20.01.2025 15:00:00</b>"></i>
                 </div>
             </div>
-        </div>
-    </div>
-</div>`, date.Format("2006-01-02"))
+        </div>`, date.Format("2006-01-02"))
+	mealsString += `    </div>
+</div>`
 	return mealsString
 }
 
