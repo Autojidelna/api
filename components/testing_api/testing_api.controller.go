@@ -3,9 +3,12 @@ package testingapi
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // @tags Testing API
@@ -14,7 +17,7 @@ import (
 // @Success		300
 // @Router			/testing [get]
 func testingRoot(context *gin.Context) {
-	context.Redirect(http.StatusFound, "/login")
+	context.Redirect(http.StatusFound, "/testing/login")
 }
 
 // @tags Testing API
@@ -30,17 +33,18 @@ func testingSecurity(context *gin.Context) {
 	username := context.PostForm("j_username")
 	password := context.PostForm("j_password")
 	xsrfToken := context.PostForm("_csrf")
+	targetUrl := context.PostForm("targetUrl")
 
 	//! Very half-baked no worries all WIP
 	if !(username == "user" && password == "password") {
-		context.SetCookie("remember-me", "", 0, "/", "", false, false)
-		context.Status(http.StatusFound)
+		context.SetCookie("remember-me", "", -1, "/", "", false, false)
+		context.Redirect(http.StatusFound, "/testing/login")
 	}
-	context.SetCookie("XSRF-TOKEN", uuid.NewString(), -1, "/", "", true, true)
-	context.SetCookie("JSESSIONID", "RANDOM123", -1, "/", "", true, true)
+	context.SetCookie("XSRF-TOKEN", uuid.NewString(), 0, "/", "", true, true)
+	context.SetCookie("JSESSIONID", "RANDOM123", 0, "/", "", true, true)
 
 	fmt.Println("username:" + username + " password:" + password + " xsrfToken:" + xsrfToken)
-	context.Status(http.StatusFound)
+	context.Redirect(http.StatusFound, targetUrl)
 }
 
 // @tags Testing API
@@ -50,7 +54,16 @@ func testingSecurity(context *gin.Context) {
 // @Success		200
 // @Router			/testing/faces/secured/main.jsp [get]
 func testingDay(context *gin.Context) {
-	context.HTML(http.StatusOK, "main.jsp.html", gin.H{})
+	dayString := context.Query("day")
+	date, err := time.Parse("2006-01-02", dayString)
+	if err != nil {
+		date = time.Now()
+	}
+
+	context.HTML(http.StatusOK, "main.jsp.html", gin.H{
+		"Lunches": buildLunches(date),
+		"Footer":  buildFooter(),
+	})
 }
 
 // @tags Testing API
@@ -60,7 +73,9 @@ func testingDay(context *gin.Context) {
 // @Success		200
 // @Router			/testing/faces/secured/month.jsp [get]
 func testingMonth(context *gin.Context) {
-	context.HTML(http.StatusOK, "month.jsp.html", gin.H{})
+	context.HTML(http.StatusOK, "month.jsp.html", gin.H{
+		"Footer": buildFooter(),
+	})
 }
 
 // @tags Testing API
@@ -70,7 +85,9 @@ func testingMonth(context *gin.Context) {
 // @Success		200
 // @Router			/testing/faces/secured/burza.jsp [get]
 func testingBurza(context *gin.Context) {
-	context.HTML(http.StatusOK, "burza.jsp.html", gin.H{})
+	context.HTML(http.StatusOK, "burza.jsp.html", gin.H{
+		"Footer": buildFooter(),
+	})
 }
 
 // @tags Testing API
@@ -80,11 +97,23 @@ func testingBurza(context *gin.Context) {
 // @Success		200
 // @Router			/testing/faces/login.jsp [get]
 func testingSetting(context *gin.Context) {
-	context.HTML(http.StatusOK, "setting.html", gin.H{})
+	printer := message.NewPrinter(language.Czech)
+	creditString := printer.Sprintf("%.2f", baseCredit)
+	context.HTML(http.StatusOK, "setting.html", gin.H{
+		"Footer": buildFooter(),
+		"Credit": creditString,
+	})
 }
 
 func testingLogin(context *gin.Context) {
-	context.SetCookie("XSRF-TOKEN", uuid.NewString(), -1, "/", "", true, true)
-	context.SetCookie("JSESSIONID", "RANDOM123", -1, "/", "", true, true)
-	context.HTML(http.StatusOK, "login.html", gin.H{})
+	_, errXsfr := context.Request.Cookie("XSRF-TOKEN")
+	_, errJsid := context.Request.Cookie("JSESSIONID")
+	if errXsfr == http.ErrNoCookie || errJsid == http.ErrNoCookie {
+		context.SetCookie("XSRF-TOKEN", uuid.NewString(), 0, "/", "", true, true)
+		context.SetCookie("JSESSIONID", "RANDOM123", 0, "/", "", true, true)
+	}
+
+	context.HTML(http.StatusOK, "login.html", gin.H{
+		"Footer": buildFooter(),
+	})
 }

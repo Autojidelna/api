@@ -57,8 +57,6 @@ func setupRouter() *gin.Engine {
 	sentrytest.Register(app)
 	health.Register(app)
 
-	return app
-
 	app.GET("/", func(context *gin.Context) {
 		context.Redirect(http.StatusTemporaryRedirect, "/docs/index.html")
 	})

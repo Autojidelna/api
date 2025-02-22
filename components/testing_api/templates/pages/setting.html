@@ -5,6 +5,25 @@
 </head>
 <body>
     <div id="bodyContext" style="height: 100%;">
+        <div id="topContext" class="noPrint topContext">
+            <div class="topMenu topMenuMinWidth" style="padding-top: 0px; padding-bottom: 0px" role="banner">
+                <table style="width: 100%;">
+                    <tr>
+                        <td class="statusBar statusBarMain">
+                            <span class="topMenuItem">čas: <span id="Clock"
+                                    style="font-weight: bold;">00:00.00</span></span>
+                            <span id="kreditInclude">
+                                <span class="topMenuItem"> <span
+                                        title="Průběžně aktualizovaný kredit, který zahrnuje všechny objednávky i na období budoucí. ">kredit</span>:
+                                    <span id="Kredit" tabindex="0" style="font-weight: bold; color: #99cc00;"
+                                        title="{{ .Credit }} limit účtu je&nbsp;0,00">{{ .Credit }}&nbsp;Kč</span>
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div class="mainContext mainContextMinWidth" id="mainContext">
             <form id="stravnikUdaje" name="stravnikUdaje" method="post" action="/web/setting"
                 enctype="application/x-www-form-urlencoded" class="hr">
@@ -112,14 +131,7 @@
                     name="javax.faces.ViewState" id="javax.faces.ViewState"
                     value="rC6Jcx7wzWiAfBYy/JPaHxdsklB9k9iNJEdK1h0mJnT+gCGOnwglVwrUaAKEnTQ6ObjhshsQZbW2yLwyOtbM5H+WAI3SZTm0MgvnhbtOtL4nBBolIn/lglhlPxqx/ZwddyQ1AA==" />
             </form>
-            <div align="center" class="topMenu topMenuMinWidth bottomBar textGrey noPrint" role="contentinfo"> Změna
-                jídelníčku vyhrazena. | iCanteen 2.18.03
-
-                | <span class="topMenuItem">poslední přihlášení: <span id="PoslLogin"
-                        style="font-weight: bold;">2025-01-20 13:03:10.0 IP: 1.1.1.1</span></span>
-                | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021 | <a href="mobile.jsp"><i
-                        class="far fa-mobile"></i> Mobilní zobrazení</a>
-            </div>
+            {{ .Footer }}
         </div>
     </div>
 </body>

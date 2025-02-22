@@ -9,7 +9,7 @@
             <div id="login_menu" class="login_menu login_menu_margin">
                 <div id="signup-user-col">
                     <div>
-                        <form method="POST" name="formName" action="/j_spring_security_check">
+                        <form method="POST" name="formName" action="/testing/j_spring_security_check">
                             <ul>
                                 <li>
                                     <div class="input-group margin-bottom-sm">
@@ -31,7 +31,7 @@
                                     <input type="hidden" name="terminal" value="false" />
                                     <input type="hidden" name="_csrf" value="20ff5e60-24a1-4037-9f3f-551d79398d63" />
                                     <input type="hidden" name="targetUrl"
-                                        value="/faces/secured/main.jsp?terminal=false&amp;status=true&amp;printer=&amp;keyboard=" />
+                                        value="/testing/faces/secured/main.jsp?terminal=false&amp;status=true&amp;printer=&amp;keyboard=" />
                                     <input type="submit" value="Přihlásit" class="btn btn-primary btn-login" />
                                 </li>
                             </ul>
@@ -41,12 +41,6 @@
             </div>
         </div>
     </div>
-    <div align="center" class="topMenu topMenuMinWidth bottomBar textGrey noPrint" role="contentinfo"> Změna
-        jídelníčku vyhrazena. | iCanteen 2.18.03
-        | <span class="topMenuItem">poslední přihlášení: <span id="PoslLogin"
-                style="font-weight: bold;">2025-01-20 13:03:10.0 IP: 1.1.1.1</span></span>
-        | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021 | <a href="mobile.jsp"><i
-                class="far fa-mobile"></i> Mobilní zobrazení</a>
-    </div>
+    {{ .Footer }}
 </body>
 </html>
