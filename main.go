@@ -17,7 +17,7 @@ package main
 // @name Authorization
 
 import (
-	dbexample "autojidelna/components/db_example"
+	//dbexample "autojidelna/components/db_example"
 	"autojidelna/components/health"
 	sentrytest "autojidelna/components/sentry_test"
 	testingapi "autojidelna/components/testing_api"
@@ -53,7 +53,7 @@ func setupRouter() *gin.Engine {
 
 	// register modules
 	testingapi.Register(app)
-	dbexample.Register(app, dbClient)
+	//dbexample.Register(app, dbClient)
 	sentrytest.Register(app)
 	health.Register(app)
 
@@ -149,8 +149,8 @@ func initSentry() {
 
 func main() {
 	initSentry()
-	initDatabase()
-	defer dbClient.Close()
+	//initDatabase()
+	//defer dbClient.Close()
 
 	app := setupRouter()
 	port := getVariable("APP_PORT", "80")
