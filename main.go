@@ -57,6 +57,7 @@ func setupRouter() *gin.Engine {
 	sentrytest.Register(app)
 	health.Register(app)
 
+	app.StaticFS("/assets", http.Dir("./assets"))
 	app.GET("/", func(context *gin.Context) {
 		context.Redirect(http.StatusTemporaryRedirect, "/docs/index.html")
 	})

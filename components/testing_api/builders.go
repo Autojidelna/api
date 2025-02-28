@@ -47,7 +47,7 @@ func buildLunches(date time.Time) template.HTML {
 	fmt.Println(lunchId)
 	//
 	lunchString := ""
-	fileBytes, err := os.ReadFile("json/meals.json")
+	fileBytes, err := os.ReadFile("assets/json/meals.json")
 
 	if err != nil {
 		lunchString = "Error: Read File Failed"
