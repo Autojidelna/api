@@ -169,7 +169,9 @@ func buildAllergens(allergens []Allergen) string {
 	allergensString := `(`
 	for _, allergenItem := range allergens {
 		allergensString += fmt.Sprintf(
-			`<span title="%s" class="textGrey">%s</span><span>, </span>`,
+			`<span 
+            title="%s"
+            class="textGrey">%s</span><span>, </span>`,
 			allergenItem.Popis, allergenItem.Nazev,
 		)
 	}
@@ -183,10 +185,9 @@ func buildBurza() {
 
 func buildFooter() template.HTML {
 	footerString := fmt.Sprintf(
-		`<div align="center" class="topMenu topMenuMinWidth bottomBar textGrey noPrint" role="contentinfo"> Změna
-            jídelníčku vyhrazena. | iCanteen %s
-| <span class="topMenuItem">poslední přihlášení: <span id="PoslLogin"
-            style="font-weight: bold;">2025-01-01 00:00:00.0 IP: 1.1.1.1</span></span>
-</div>`, baseVersion)
+		`<div align="center" class="textGrey noPrint" style="position: relative; clear: both; z-index:1; text-align: center; margin-top: 10px">iCanteen %s | 2025-01-01 00:00:00 | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021</div>`,
+		baseVersion,
+	)
+
 	return template.HTML(footerString)
 }
