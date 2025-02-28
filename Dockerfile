@@ -15,6 +15,7 @@ RUN go build -o /godocker
 
 FROM alpine:3.14
 COPY --from=builder /godocker /
+COPY --from=builder /app/assets /assets/
 # Tells Docker which network port your container listens on
 # Builds your app with optional configuration
 # Set the environment variable for the build

@@ -39,6 +39,7 @@ func testingSecurity(context *gin.Context) {
 	if !(username == "user" && password == "password") {
 		context.SetCookie("remember-me", "", -1, "/", "", false, false)
 		context.Redirect(http.StatusFound, "/testing/login")
+		return
 	}
 	context.SetCookie("XSRF-TOKEN", uuid.NewString(), 0, "/", "", true, true)
 	context.SetCookie("JSESSIONID", "RANDOM123", 0, "/", "", true, true)
@@ -99,7 +100,7 @@ func testingBurza(context *gin.Context) {
 func testingSetting(context *gin.Context) {
 	printer := message.NewPrinter(language.Czech)
 	creditString := printer.Sprintf("%.2f", baseCredit)
-	context.HTML(http.StatusOK, "setting.html", gin.H{
+	context.HTML(http.StatusOK, "setting.2.html", gin.H{
 		"Footer": buildFooter(),
 		"Credit": creditString,
 	})

@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>iCanteen - objednání stravy</title>
+    <!-- Stripped Down HTML of /faces/secured/main.jsp page. Only contains the neccessary structure with the expected data.-->
+</head>
+<body>
+    <div id="bodyContext" style="height: 100%;">
+        <div id="mainContext" class="mainContext mainContextMinWidth" role="main">
+            <table width="100%">
+                <tr>
+                    <td valign="top" style="padding-right: 12px;">
+                        <div id="day-0000-00-00" class="jidelnicekTop semibold" role="heading">Jídelníček na 00.00.0000
+                            -
+                            Nothing
+                        </div>
+                            {{ .Lunches }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            {{ .Footer }}
+        </div>
+    </div>
+</body>
+</html>

@@ -2,6 +2,7 @@
 <head>
     <title>iCanteen - objednání stravy</title>
     <!-- Stripped Down HTML of /web/setting page. Only contains the neccessary structure with the expected data.-->
+    <!-- !! Credit needs to be on a single line !! -->
 </head>
 <body>
     <div id="bodyContext" style="height: 100%;">
@@ -15,10 +16,33 @@
                             <span id="kreditInclude">
                                 <span class="topMenuItem"> <span
                                         title="Průběžně aktualizovaný kredit, který zahrnuje všechny objednávky i na období budoucí. ">kredit</span>:
-                                    <span id="Kredit" tabindex="0" style="font-weight: bold; color: #99cc00;"
-                                        title="{{ .Credit }} limit účtu je&nbsp;0,00">{{ .Credit }}&nbsp;Kč</span>
+                                    <span id="Kredit" tabindex="0" style="font-weight: bold; color: #99cc00;" title="{{ .Credit }} limit účtu je&nbsp;0,00">{{ .Credit }}&nbsp;Kč</span>
                                 </span>
                             </span>
+                        </td>
+                        <td class="statusBar statusBarMain">
+                        </td>
+                        <td class="statusBar statusBarRight">
+                            <a href="javascript:window.print()" title="Vytisknout stránku"><i
+                                    class="topMenuItem fa fa-print fa-lg"></i></a>
+                            <a href="/web/info" title="Informace o jídelně"><i
+                                    class="topMenuItem fa fa-info-circle fa-lg"></i></a>
+                            <a href="/web/audit" title="Audit log operací v systému"><i
+                                    class="topMenuItem fa fa-file-alt fa-lg"></i></a>
+                            <a href="/web/setting" title="Možnosti nastavení systému"><i
+                                    class="topMenuItem fa fa-cog fa-lg"></i></a>
+                            <a href="/web/messages" title="Zprávy od jídelny"><span class="topMenuItem"><i
+                                        class=" fa fa-envelope fa-lg"></i></span></a>
+                            <span class="topMenuItem" title="Přihlašovací jméno: skutecny421"><span
+                                    id="top:status:firstName">Jarmil</span>&nbsp;<span
+                                    id="top:status:lastName">SKUTEČNÝ</span></span>
+                            <span><a href="#" onclick="document.getElementById('logout').submit();"
+                                    title="Odhlášení uživatele ze systému"><i
+                                        class="topMenuItem fa fa-sign-out-alt fa-lg warning"></i></a></span>
+                            <form name="logout" id="logout" method="POST"
+                                action="/logout?terminal=false&amp;keyboard=&amp;printer=">
+                                <input type="hidden" name="_csrf" value="733689df-aff7-4207-853a-83a55fe2ee36" />
+                            </form>
                         </td>
                     </tr>
                 </table>
