@@ -129,7 +129,7 @@ func testingOrder(context *gin.Context) {
 		profileOrders[mealDateString] = 0
 	case "make":
 		prevMealIndex := profileOrders[mealDateString]
-		profileCredit -= BASE_PRICE - BASE_PRICE
+		profileCredit -= BASE_PRICE - BASE_PRICE //! Add getting real prices from global lunch state struct
 		profileOrders[mealDateString] = mealIndex
 		fmt.Println(prevMealIndex)
 	case "reorder":
