@@ -3,6 +3,7 @@ package testingapi
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -62,7 +63,7 @@ func testingDay(context *gin.Context) {
 	}
 
 	context.HTML(http.StatusOK, "main.jsp.html", gin.H{
-		"Lunches": buildLunches(date),
+		"Lunches": buildLunches(date, 0),
 		"Footer":  buildFooter(),
 	})
 }
@@ -96,14 +97,49 @@ func testingBurza(context *gin.Context) {
 // @Description	Login
 // @Produce		html
 // @Success		200
-// @Router			/testing/faces/login.jsp [get]
+// @Router			/testing/web/setting [get]
 func testingSetting(context *gin.Context) {
 	printer := message.NewPrinter(language.Czech)
-	creditString := printer.Sprintf("%.2f", baseCredit)
+	creditString := printer.Sprintf("%.2f", profileCredit)
 	context.HTML(http.StatusOK, "setting.2.html", gin.H{
 		"Footer": buildFooter(),
 		"Credit": creditString,
 	})
+}
+
+func testingOrder(context *gin.Context) {
+	// ID
+	mealIndex, err := strconv.Atoi(context.Query("ID"))
+	if err != nil {
+		context.String(400, "Invalid Query Parameter ID! Must resolve to INT32!")
+		fmt.Println("Invalid Query Parameter ID! Must resolve to INT32!")
+	}
+	// Day
+	mealDate, err := time.Parse("2006-01-02", context.Query("day"))
+	if err != nil {
+		context.String(400, "Invalid Query Parameter DAY! Must resolve to DATE in 2006-01-02 format!")
+		fmt.Println("Invalid Query Parameter DAY! Must resolve to DATE in 2006-01-02 format!")
+	}
+	mealDateString := mealDate.Format("2006-01-02")
+	// Type
+	transactionType := context.Query("type")
+	switch transactionType {
+	case "delete":
+		profileCredit += BASE_PRICE
+		profileOrders[mealDateString] = 0
+	case "make":
+		prevMealIndex := profileOrders[mealDateString]
+		profileCredit -= BASE_PRICE - BASE_PRICE
+		profileOrders[mealDateString] = mealIndex
+		fmt.Println(prevMealIndex)
+	case "reorder":
+		profileCredit -= BASE_PRICE
+		profileOrders[mealDateString] = mealIndex
+	default:
+		context.String(400, "Invalid Query Parameter TYPE! Must be 'make', 'reorder' or 'delete'!")
+		fmt.Println("Invalid Query Parameter TYPE! Must be 'make', 'reorder' or 'delete'!")
+	}
+	context.Status(200)
 }
 
 func testingLogin(context *gin.Context) {

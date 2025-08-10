@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"os"
+	"strconv"
 	"time"
 
 	"encoding/json"
@@ -31,13 +32,13 @@ type Allergen struct {
 	Popis string `json:"popis"`
 }
 
-func buildLunches(date time.Time) template.HTML {
+func buildLunches(date time.Time, userId int) template.HTML {
 	fmt.Println(date)
 	// Skip Weekends
 	if int(date.Weekday()) == 0 || int(date.Weekday()) == 6 {
-		return template.HTML(lunchUnavailableString)
+		return template.HTML(LUNCH_UNAVAILABLE_STRING)
 	}
-	// Protoype logic to select an id for a meal
+	// Prototype logic to select an id for a meal
 	_, week := date.ISOWeek()
 	lunchId := 0
 	if week%2 == 0 {
@@ -73,15 +74,33 @@ func buildLunches(date time.Time) template.HTML {
 
 func buildMeals(date time.Time, meals []Meal) string {
 	// Begin Main Wrapper
+	dateString := date.Format("2006-01-02")
 	mealsString := fmt.Sprintf(
 		`<div id="orderContent%s" class="orderContent"><div class="jidelnicekMain">`,
-		date.Format("2006-01-02"),
+		dateString,
 	)
 	// Generate Meal HTML
-	for _, mealItem := range meals {
+	for index, mealItem := range meals {
 		// Begin Item Wrapper
 		mealsString += `<div class="jidelnicekItem " role="group"><div class="jidelnicekItemWrapper">`
 		// Meal Interaction Primary - Order/Cancel
+		/// State Logic
+		orderState, ok := profileOrders[dateString]
+		if !ok {
+			orderState = 0
+			profileOrders[dateString] = 0
+		}
+		mealIndex := index + 1
+		if int(time.Since(date).Hours()) < -ORDER_CUTOFF_HOURS {
+			mealItem.LzeObjednat = true
+		}
+		if mealIndex == orderState {
+			mealItem.Objednano = true
+		} else {
+			mealItem.Objednano = false
+		}
+
+		/// Frontend Logic
 		state, action := gatherStateAction(mealItem)
 		printer := message.NewPrinter(language.Czech)
 		priceString := printer.Sprintf("%.2f", mealItem.Cena)
@@ -108,7 +127,7 @@ func buildMeals(date time.Time, meals []Meal) string {
 				</a>
 			</div>`,
 			// Last Part is diff when not ordered, not just the orderConfirmString, but it hopefully isnt important
-			state, buildMealLink(date, mealItem), action, mealItem.Varianta, priceString, orderConfirmString, priceString,
+			state, buildMealLink(date, mealItem, mealIndex), action, mealItem.Varianta, priceString, orderConfirmString, priceString,
 		)
 		// Meal Name and Allergens
 		mealsString += fmt.Sprintf(
@@ -119,7 +138,7 @@ func buildMeals(date time.Time, meals []Meal) string {
 				class="textGrey">%s</span>
 				<br>
 			</div>`,
-			date.Format("2006-01-02"), mealItem.Nazev, buildAllergens(mealItem.Alergeny),
+			dateString, mealItem.Nazev, buildAllergens(mealItem.Alergeny),
 		)
 		// Meal Interaction Secondary - Burza
 		//!! Not Implemented Yet
@@ -161,8 +180,26 @@ func gatherStateAction(meal Meal) (string, string) {
 	return stateString, actionString
 }
 
-func buildMealLink(date time.Time, meal Meal) string {
-	return `ajaxOrder(this, 'db/dbProcessOrder.jsp?time=1737310888909&amp;token=;ID=755744&amp;day=2025-01-21&amp;type=delete&amp;week=&amp;terminal=false&amp;keyboard=false&amp;printer=false', '2025-01-21', 'ordered')`
+func buildMealLink(date time.Time, meal Meal, mealIndex int) string {
+	// There are 3 types: "make" - to order, "delete" - to cancel, "reorder" - to reorder
+	dateString := date.Format("2006-01-02")
+	orderState, ok := profileOrders[dateString]
+	if !ok {
+		orderState = 0
+		profileOrders[dateString] = 0
+	}
+	transactionType := "make"
+	if orderState > 0 {
+		if orderState == mealIndex {
+			transactionType = "delete"
+		} else {
+			transactionType = "reorder"
+		}
+	}
+	return fmt.Sprintf(
+		`ajaxOrder(this, 'db/dbProcessOrder.jsp?time=1737310888909&amp;token=;&amp;ID=%s&amp;day=%s&amp;type=%s&amp;week=&amp;terminal=false&amp;keyboard=false&amp;printer=false', '2025-01-21', 'ordered')`,
+		strconv.Itoa(mealIndex), dateString, transactionType,
+	)
 }
 
 func buildAllergens(allergens []Allergen) string {
@@ -185,8 +222,8 @@ func buildBurza() {
 
 func buildFooter() template.HTML {
 	footerString := fmt.Sprintf(
-		`<div align="center" class="textGrey noPrint" style="position: relative; clear: both; z-index:1; text-align: center; margin-top: 10px">iCanteen %s | 2025-01-01 00:00:00 | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021</div>`,
-		baseVersion,
+		`<div align="center" class="textGrey noPrint">iCanteen %s | 2025-01-01 00:00:00 | &copy; <a href="https://www.z-ware.cz">Z-WARE s.r.o.</a> 2003-2021</div>`,
+		BASE_VERSION,
 	)
 
 	return template.HTML(footerString)
