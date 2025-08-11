@@ -3,76 +3,29 @@ package testingapi
 import (
 	"fmt"
 	"html/template"
-	"os"
 	"strconv"
 	"time"
-
-	"encoding/json"
 
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
 
-type LunchMeal struct {
-	Jidla []Meal `json:"jidla"`
-}
-
-type Meal struct {
-	Nazev       string     `json:"nazev"`
-	Varianta    string     `json:"varianta"`
-	Objednano   bool       `json:"objednano"`
-	LzeObjednat bool       `json:"lzeObjednat"`
-	NaBurze     bool       `json:"naBurze"`
-	Cena        float32    `json:"cena"`
-	Alergeny    []Allergen `json:"alergeny"`
-}
-
-type Allergen struct {
-	Nazev string `json:"nazev"`
-	Popis string `json:"popis"`
-}
-
-func buildLunches(date time.Time, userId int) template.HTML {
-	fmt.Println(date)
+func buildLunches(date time.Time, username string) template.HTML {
 	// Skip Weekends
 	if int(date.Weekday()) == 0 || int(date.Weekday()) == 6 {
 		return template.HTML(LUNCH_UNAVAILABLE_STRING)
 	}
-	// Prototype logic to select an id for a meal
-	_, week := date.ISOWeek()
-	lunchId := 0
-	if week%2 == 0 {
-		lunchId = 5
-	}
-	lunchId += int(date.Weekday())
-	fmt.Println(lunchId)
-	//
-	lunchString := ""
-	fileBytes, err := os.ReadFile("assets/json/meals.json")
 
-	if err != nil {
-		lunchString = "Error: Read File Failed"
-		fmt.Println("Error when reading file")
+	dayMeals, ok := getLunchesDay(date)
+	if !ok {
+		return template.HTML(LUNCH_UNAVAILABLE_STRING)
 	}
-
-	var lunches map[string]LunchMeal
-	err = json.Unmarshal(fileBytes, &lunches)
-	if err != nil {
-		lunchString = "Error: Invalid JSON"
-		fmt.Println("Error when reading file")
-	}
-
-	lunchString = string(fileBytes)
-	lunchIdString := fmt.Sprintf("%d", lunchId)
-	dayMeals := lunches[lunchIdString]
-	fmt.Println("Jidla")
-	lunchString = dayMeals.Jidla[0].Nazev
-	lunchString = buildMeals(date, dayMeals.Jidla)
+	lunchString := buildMeals(username, date, dayMeals.Jidla)
 
 	return template.HTML(lunchString)
 }
 
-func buildMeals(date time.Time, meals []Meal) string {
+func buildMeals(username string, date time.Time, meals []Meal) string {
 	// Begin Main Wrapper
 	dateString := date.Format("2006-01-02")
 	mealsString := fmt.Sprintf(
@@ -85,10 +38,10 @@ func buildMeals(date time.Time, meals []Meal) string {
 		mealsString += `<div class="jidelnicekItem " role="group"><div class="jidelnicekItemWrapper">`
 		// Meal Interaction Primary - Order/Cancel
 		/// State Logic
-		orderState, ok := profileOrders[dateString]
-		if !ok {
+		orderState, err := getUserOrder(username, date)
+		if err != nil {
+			fmt.Println("This shouldn't happen, somehow username doesn't exist, but the sessionId matches?! buildMeals")
 			orderState = 0
-			profileOrders[dateString] = 0
 		}
 		mealIndex := index + 1
 		if int(time.Since(date).Hours()) < -ORDER_CUTOFF_HOURS {
@@ -108,6 +61,8 @@ func buildMeals(date time.Time, meals []Meal) string {
 		if state == "ordered" {
 			orderConfirmString = "Máte objednáno"
 		}
+		mealLink := buildMealLink(username, date, mealItem, mealIndex)
+
 		mealsString += fmt.Sprintf(
 			`
 			<div class="jidWrapLeft">
@@ -127,7 +82,7 @@ func buildMeals(date time.Time, meals []Meal) string {
 				</a>
 			</div>`,
 			// Last Part is diff when not ordered, not just the orderConfirmString, but it hopefully isnt important
-			state, buildMealLink(date, mealItem, mealIndex), action, mealItem.Varianta, priceString, orderConfirmString, priceString,
+			state, mealLink, action, mealItem.Varianta, priceString, orderConfirmString, priceString,
 		)
 		// Meal Name and Allergens
 		mealsString += fmt.Sprintf(
@@ -180,13 +135,13 @@ func gatherStateAction(meal Meal) (string, string) {
 	return stateString, actionString
 }
 
-func buildMealLink(date time.Time, meal Meal, mealIndex int) string {
+func buildMealLink(username string, date time.Time, meal Meal, mealIndex int) string {
 	// There are 3 types: "make" - to order, "delete" - to cancel, "reorder" - to reorder
 	dateString := date.Format("2006-01-02")
-	orderState, ok := profileOrders[dateString]
-	if !ok {
+	orderState, err := getUserOrder(username, date)
+	if err != nil {
+		fmt.Println("This shouldn't happen, somehow username doesn't exist, but the sessionId matches?! buildMealLink")
 		orderState = 0
-		profileOrders[dateString] = 0
 	}
 	transactionType := "make"
 	if orderState > 0 {

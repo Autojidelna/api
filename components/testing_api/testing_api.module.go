@@ -1,10 +1,27 @@
 package testingapi
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+)
 
 // Api creating dummy icanteen instance for testing/review
 func Register(router *gin.Engine) {
+	ok := initUsers()
+	if !ok {
+		fmt.Printf("Aborted initialization of Testing API!!! Failed initUsers")
+		return
+	}
+	ok = initLunches()
+	if !ok {
+		fmt.Printf("Aborted initialization of Testing API!!! Failed initLunches")
+		return
+	}
+
+	initSessions()
 	initOrdersState()
+
 	router.LoadHTMLGlob("./assets/templates/**/*")
 	app := router.Group("testing")
 	app.GET("/", testingRoot)

@@ -1,0 +1,18 @@
+//schema:
+//  array of objects
+//  object keys:
+//      username:   string - unique user identifier
+//      password:   string - bcrypt hash using 16 rounds,can be generated here: https://cyberchef.io/#recipe=Bcrypt(16)&input=cGFzc3dvcmQ
+//      credit:     float64 - used as the initial credit amount for the user
+[
+    {
+        "username": "user",
+        "password": "$2a$16$gLP7PIhLeqpr06OntI1Qm.GA/EAvORPWkeq4nUdJhLHWZbIZQJXl6", //password
+        "credit": 420.69
+    },
+    {
+        "username": "pepa",
+        "password": "$2a$16$4lDcZSJS4vkiFz.I9yjDmu6/O9MbTDaFqNxzgeGWgncFMCXBSXupi", //FujFuj69*
+        "credit": 88.00
+    }
+]
