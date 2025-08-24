@@ -3,6 +3,7 @@ package testingapi
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"time"
@@ -28,41 +29,82 @@ type Allergen struct {
 }
 
 var lunchStore map[string]LunchMeal
+var lastUpdatedDate time.Time
 
 func initLunches() bool {
 	lunchStore = make(map[string]LunchMeal)
+	lastUpdatedDate = time.Now()
 
-	// Read the raw lunches from a file
+	// Generate lunches for specific days
+	initialDay := time.Now().AddDate(0, 0, -LUNCH_GEN_PAST_DAYS)
+	for i := 0; i <= LUNCH_GEN_FUTURE_DAYS+LUNCH_GEN_PAST_DAYS; i++ {
+		currentDay := initialDay.AddDate(0, 0, i)
+
+		updateLunchDay(currentDay)
+	}
+	return true
+}
+
+func getRawLunches() (map[string]LunchMeal, bool) {
 	var rawLunches map[string]LunchMeal
 	fileBytes, err := os.ReadFile("assets/json/meals.json")
 	if err != nil {
 		fmt.Println("Error when reading meals.json file")
-		return false
+		return rawLunches, false
 	}
 
 	err = json.Unmarshal(fileBytes, &rawLunches)
 	if err != nil {
 		fmt.Println("Error when parsing meals.json file")
-		return false
+		return rawLunches, false
 	}
-	// Generate lunches for specific days
-	initialDay := time.Now().AddDate(0, 0, -LUNCH_GEN_PAST_DAYS)
-	for i := 0; i <= LUNCH_GEN_FUTURE_DAYS+LUNCH_GEN_PAST_DAYS; i++ {
-		currentDay := initialDay.AddDate(0, 0, i)
-		currentDayString := currentDay.Format(DATE_FORMAT_YYYY_DD_MM)
-		_, week := currentDay.ISOWeek()
-		lunchId := 0
-		if week%2 == 0 {
-			lunchId = 5
-		}
-		lunchId += int(currentDay.Weekday())
-		lunchIdString := strconv.Itoa(lunchId)
 
-		fmt.Println("[LUNCH] Generating for date:" + currentDayString + " lunchId:" + lunchIdString)
+	return rawLunches, true
+}
 
-		lunchStore[currentDayString] = rawLunches[lunchIdString]
+/* Generates lunch for a specific day*/
+func updateLunchDay(date time.Time) {
+	dateString := date.Format(DATE_FORMAT_YYYY_DD_MM)
+	_, ok := lunchStore[dateString]
+	if ok {
+		return
 	}
-	return true
+
+	rawLunches, ok := getRawLunches()
+	if !ok {
+		return
+	}
+
+	_, week := date.ISOWeek()
+	lunchId := 0
+	if week%2 == 0 {
+		lunchId = 5
+	}
+	lunchId += int(date.Weekday())
+	lunchIdString := strconv.Itoa(lunchId)
+
+	fmt.Println("[LUNCH] Generating for date:" + dateString + " lunchId:" + lunchIdString)
+
+	lunchStore[dateString] = rawLunches[lunchIdString]
+}
+
+//TODO Update order database too
+
+/* Updates the lunch database when the date changes.*/
+func updateLunches() {
+	currentDate := time.Now()
+
+	if lastUpdatedDate.Day() == currentDate.Day() {
+		return
+	}
+
+	daysSince := int(math.Floor((currentDate.Sub(lastUpdatedDate).Hours() + 24) / 24))
+	for i := 0; i <= daysSince; i++ {
+		addDate := currentDate.AddDate(0, 0, LUNCH_GEN_FUTURE_DAYS-i)
+		updateLunchDay(addDate)
+	}
+
+	lastUpdatedDate = currentDate
 }
 
 func getLunchesDay(date time.Time) (LunchMeal, bool) {

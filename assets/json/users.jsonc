@@ -14,5 +14,10 @@
         "username": "pepa",
         "password": "$2a$16$4lDcZSJS4vkiFz.I9yjDmu6/O9MbTDaFqNxzgeGWgncFMCXBSXupi", //FujFuj69*
         "credit": 88.00
+    },
+    {
+        "username": "google-verify",
+        "password": "$2a$16$iBu85iRHGUZn1f1uMIbPYex0YjxI3CWzCk/7uTyikskHETZEvKVMy", //G00gle*YoU-Shall-Pa55*440
+        "credit": 1000.00
     }
 ]
