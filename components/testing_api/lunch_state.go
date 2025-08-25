@@ -88,20 +88,22 @@ func updateLunchDay(date time.Time) {
 	lunchStore[dateString] = rawLunches[lunchIdString]
 }
 
-//TODO Update order database too
-
 /* Updates the lunch database when the date changes.*/
-func updateLunches() {
+func UpdateLunchesAndOrders() {
 	currentDate := time.Now()
 
 	if lastUpdatedDate.Day() == currentDate.Day() {
+		fmt.Println("Update of lunches and orders skipped - waiting for the next day.")
 		return
 	}
+	fmt.Println("Update of lunches and orders started.")
 
+	// Add new lunches
 	daysSince := int(math.Floor((currentDate.Sub(lastUpdatedDate).Hours() + 24) / 24))
 	for i := 0; i <= daysSince; i++ {
 		addDate := currentDate.AddDate(0, 0, LUNCH_GEN_FUTURE_DAYS-i)
 		updateLunchDay(addDate)
+		updateOrderDay(addDate)
 	}
 
 	lastUpdatedDate = currentDate

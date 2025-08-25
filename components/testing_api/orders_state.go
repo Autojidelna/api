@@ -27,6 +27,18 @@ func initOrdersState() {
 	}
 }
 
+// Sets unordered for all users on a new day
+func updateOrderDay(date time.Time) {
+	dateString := date.Format(DATE_FORMAT_YYYY_DD_MM)
+	for _, username := range getAllUsers() {
+		_, ok := usersOrders[username][dateString]
+		if ok {
+			continue //Skip if date already has assigned order
+		}
+		usersOrders[username][dateString] = 0
+	}
+}
+
 func getUserOrder(username string, date time.Time) (int, error) {
 	userOrderData, ok := usersOrders[username]
 	if !ok {

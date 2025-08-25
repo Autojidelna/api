@@ -32,4 +32,5 @@ func Register(router *gin.Engine) {
 	app.GET("/faces/secured/burza.jsp", testingBurza)
 	app.GET("/login", testingLogin)
 	app.GET("/web/setting", testingSetting)
+
 }
