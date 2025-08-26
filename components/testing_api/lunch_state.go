@@ -39,7 +39,6 @@ func initLunches() bool {
 	initialDay := time.Now().AddDate(0, 0, -LUNCH_GEN_PAST_DAYS)
 	for i := 0; i <= LUNCH_GEN_FUTURE_DAYS+LUNCH_GEN_PAST_DAYS; i++ {
 		currentDay := initialDay.AddDate(0, 0, i)
-
 		updateLunchDay(currentDay)
 	}
 	return true

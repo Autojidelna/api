@@ -158,8 +158,8 @@ func main() {
 	port = ":" + port
 	println("App is running on http://localhost" + port)
 
+	// Update daily
 	ticker := time.NewTicker(time.Hour * 6)
-
 	go func() {
 		for range ticker.C {
 			testingapi.UpdateLunchesAndOrders()
