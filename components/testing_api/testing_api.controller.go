@@ -13,6 +13,15 @@ import (
 )
 
 // @tags Testing API
+// @Summary		Root head.
+// @Description	Ping pong
+// @Success		200
+// @Router			/testing [head]
+func testingHead(context *gin.Context) {
+	context.Status(http.StatusOK)
+}
+
+// @tags Testing API
 // @Summary		Root URL redirections
 // @Description	Redirects from the root URL to login or day page.
 // @Success		300
