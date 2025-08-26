@@ -24,6 +24,7 @@ func Register(router *gin.Engine) {
 
 	router.LoadHTMLGlob("./assets/templates/**/*")
 	app := router.Group("testing")
+	app.HEAD("/", testingHead)
 	app.GET("/", testingRoot)
 	app.GET("/faces/secured/db/dbProcessOrder.jsp", testingOrder)
 	app.POST("/j_spring_security_check", testingSecurity)
